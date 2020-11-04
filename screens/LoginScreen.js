@@ -33,8 +33,28 @@ export default class LoginScreen extends Component {
             googleUser.accessToken
             );
         // Sign in with credential from the Google user.
-        firebase.auth().signInWithCredential(credential).then(() => {
-          console.log('User Signed In')
+        firebase.auth().signInWithCredential(credential)
+        .then((result) => {
+          console.log('User Signed In');
+          console.log(result)
+          if (result.additionalUserInfo.isNewUser) {
+            //Save each user under their own uniqueID and set details
+            firebase.database().ref('/users/' + result.user.uid).set({
+              gmail: result.user.email,
+              profile_picture: result.additionalUserInfo.profile.picture,
+              locale: result.additionalUserInfo.profile.locale,
+              first_name: result.additionalUserInfo.profile.given_name,
+              last_name: result.additionalUserInfo.profile.family_name,
+              created_at: Date.now()
+            })
+            .then((snapshot) => {
+              //console.log(snapshot)
+            })
+          } else {
+            firebase.database().ref('/users/' + result.user.uid).update({
+              last_logged_in: Date.now()
+            })
+          }
         })
         .catch((error) => {
           // Handle Errors here.

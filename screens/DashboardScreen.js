@@ -1,7 +1,7 @@
 
 import React, { Component }from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { StyleSheet, Text, View, Button } from 'react-native';
+import firebase from 'firebase';
 
 
 export default class DashboardScreen extends React.Component {
@@ -9,6 +9,7 @@ export default class DashboardScreen extends React.Component {
     return (
     <View style={styles.container}>
       <Text>DashboardScreen</Text>
+      <Button title="Sign Out" onPress={() => firebase.auth().signOut()}/>
     </View>
     )
   }
