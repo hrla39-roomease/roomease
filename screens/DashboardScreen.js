@@ -21,7 +21,6 @@ function HomeScreen() {
   )
 }
 
-
 export default function DashboardScreen (props){
 
   const { navigation } = props;
