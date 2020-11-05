@@ -8,7 +8,8 @@ db.once('open', function() {
 });
 
 const userSchema = new mongoose.Schema({
-  name: String,
+  firstName: String,
+  lastName: String,
   // birthday: Date,
   pictureURL: String,
   householdID: String,
