@@ -2,6 +2,7 @@ import React, { Component }from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, SafeAreaView} from 'react-native';
 import firebase from 'firebase';
 import axios from 'axios';
+import * as Google from "expo-google-app-auth";
 
 
 
@@ -11,10 +12,15 @@ export default class LoadingScreen extends React.Component {
     this.checkedIfLoggedIn();
   }
 
+  componentWillUnmount() {
+    this.checkedIfLoggedIn();
+  }
+
   checkedIfLoggedIn = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         axios.get(`http://localhost:3009/signin/${user.uid}`)
+        console.log(result.data.householdID)
           .then((result) => {
             if (result.data.householdID === '') {
               this.props.navigation.navigate('HouseholdConnect');

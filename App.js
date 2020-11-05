@@ -13,8 +13,6 @@ import { firebaseConfig } from './config';
 
 // firebase.initializeApp(firebaseConfig);
 
-
-
 export default class App extends React.Component {
   render() {
     return (
