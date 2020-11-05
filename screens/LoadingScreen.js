@@ -25,7 +25,14 @@ export default class LoadingScreen extends React.Component {
             if (result.data.householdID === '') {
               this.props.navigation.navigate('HouseholdConnect');
             } else {
-              this.props.navigation.navigate('Homepage');
+              this.props.navigation.navigate('Homepage', {
+                firstName: result.data.firstName,
+                lastName: result.data.lastName,
+                firebaseAuthID: result.data.firebaseAuthID,
+                householdID: result.data.householdID,
+                isHouseholdOwner: result.data.isHouseholdOwner,
+                pictureURL: result.data.pictureURL,
+              });
             }
           })
           .catch((err) => console.error(err));
