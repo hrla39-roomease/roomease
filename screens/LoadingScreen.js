@@ -2,12 +2,17 @@ import React, { Component }from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, SafeAreaView} from 'react-native';
 import firebase from 'firebase';
 import axios from 'axios';
+import * as Google from "expo-google-app-auth";
 
 
 
 export default class LoadingScreen extends React.Component {
 
   componentDidMount(){
+    this.checkedIfLoggedIn();
+  }
+
+  componentWillUnmount() {
     this.checkedIfLoggedIn();
   }
 
@@ -19,7 +24,7 @@ export default class LoadingScreen extends React.Component {
             if (result.data.householdID === '') {
               this.props.navigation.navigate('HouseholdConnect');
             } else {
-              this.props.navigation.navigate('Homepage', {
+              this.props.navigation.navigate('DashboardScreen', {
                 firstName: result.data.firstName,
                 lastName: result.data.lastName,
                 firebaseAuthID: result.data.firebaseAuthID,
