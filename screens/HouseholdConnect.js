@@ -8,8 +8,6 @@ const backgroundImage = {
 
 export default function HouseholdConnect(props) {
 
-  console.log('PROPS:', props);
-
   return (
     <ImageBackground
       source={backgroundImage}
