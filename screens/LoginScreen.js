@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
 import * as Google from "expo-google-app-auth";
 import firebase from 'firebase';
+import axios from 'axios';
 
 
 export default class LoginScreen extends Component {
@@ -21,7 +22,7 @@ export default class LoginScreen extends Component {
   }
 
   onSignIn = (googleUser) => {
-    console.log('Google Auth Response', googleUser);
+    // console.log('Google Auth Response', googleUser);
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
       unsubscribe();
@@ -38,7 +39,7 @@ export default class LoginScreen extends Component {
           console.log('User Signed In');
           console.log('UserID:', result.user.uid);
           if (result.additionalUserInfo.isNewUser) {
-            //Save each user under their own uniqueID and set details
+            // Save each user under their own uniqueID and set details
             firebase.database().ref('/users/' + result.user.uid).set({
               gmail: result.user.email,
               profile_picture: result.additionalUserInfo.profile.picture,
@@ -48,12 +49,22 @@ export default class LoginScreen extends Component {
               created_at: Date.now()
             })
             .then((snapshot) => {
-              //console.log(snapshot)
+              console.log(snapshot)
             })
+            // add user to mongodb with firebase UID
+            axios.post('http://localhost:3009/signup', {
+              firstName: result.additionalUserInfo.profile.given_name,
+              lastName: result.additionalUserInfo.profile.family_name,
+              pictureURL: result.additionalUserInfo.profile.picture,
+              firebaseAuthID: result.user.uid,
+            })
+              .then(res => console.log('success'))
+              .catch(err => console.error(err));
           } else {
             firebase.database().ref('/users/' + result.user.uid).update({
               last_logged_in: Date.now()
             })
+            // get user data from mongodb
           }
         })
         .catch((error) => {

@@ -10,8 +10,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // GET
-app.get('/signin', (req, res) => {
-
+app.get('/signin/:id', (req, res) => {
+  db.User.findOne({ firebaseAuthID: req.params.id }, (err, result) => {
+    if (err) res.status(400).send(err);
+    else res.status(200).json(result);
+  })
 });
 
 app.get('/api/household/:id', (req, res) => {
@@ -24,9 +27,10 @@ app.get('/api/household/:id', (req, res) => {
 // POST
 app.post('/signup', (req, res) => {
   // TO BE REPLACED FOR ACTUAL FIREBASE AUTH
-  const {name, birthday, pictureURL, firebaseAuthID} = req.body;
+  const {firstName, lastName , pictureURL, firebaseAuthID} = req.body;
   const newUser = new db.User({
-    name: name,
+    firstName: firstName,
+    lastName: lastName,
     // birthday: birthday,
     pictureURL: pictureURL,
     householdID: '',
