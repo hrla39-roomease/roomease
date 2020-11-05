@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground, Modal, TouchableHighlight, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  ImageBackground,
+  Modal,
+  TouchableHighlight,
+  TextInput,
+} from 'react-native';
+
 import colors from '../assets/colors.js';
 
 const backgroundImage = {
@@ -8,8 +19,14 @@ const backgroundImage = {
 
 export default function HouseholdConnect(props) {
 
-  const [createHouseholdModalVisible, setCreateHouseholdModalVisible] = useState(false);
-  const [joinHouseholdModalVisible, setJoinHouseholdModalVisible] = useState(false);
+  const [
+    createHouseholdModalVisible,
+    setCreateHouseholdModalVisible
+  ] = useState(false);
+  const [
+    joinHouseholdModalVisible,
+    setJoinHouseholdModalVisible
+  ] = useState(false);
   const [householdName, setHouseholdName] = useState('');
   const [inviteCode, setInviteCode] = useState('');
 
@@ -90,6 +107,11 @@ export default function HouseholdConnect(props) {
     </ImageBackground>
   )
 }
+
+// Routes needed:
+  // Post household
+  // Get household by _id
+  // Put household to user
 
 // onPress={() => this.props.navigation.navigate('CreateHousehold')}
 
