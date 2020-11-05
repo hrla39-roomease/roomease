@@ -3,13 +3,13 @@ import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput} 
 
 
 export default function AddExpense ({navigation}) {
+
   const [name, setName] = useState('Nick');
   const [item, setItem] = useState('Water Bill');
   const [price, setPrice] = useState('109');
 
 
   return (
-
     <View style={styles.container}>
 
       <Text>Item:</Text>
@@ -38,11 +38,8 @@ export default function AddExpense ({navigation}) {
         }
         }
       />
-
-
     </View>
   );
-
 }
 
 
