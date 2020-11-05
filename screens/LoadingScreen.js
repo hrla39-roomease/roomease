@@ -20,7 +20,6 @@ export default class LoadingScreen extends React.Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         axios.get(`http://localhost:3009/signin/${user.uid}`)
-        console.log(result.data.householdID)
           .then((result) => {
             if (result.data.householdID === '') {
               this.props.navigation.navigate('HouseholdConnect');
