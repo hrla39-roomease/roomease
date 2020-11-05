@@ -1,6 +1,5 @@
-
 import React, { Component }from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, SafeAreaView} from 'react-native';
 import firebase from 'firebase';
 
 
@@ -23,10 +22,10 @@ export default class LoadingScreen extends React.Component {
 
   render() {
     return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ActivityIndicator size="large" />
-      <Text>LoadingScreen</Text>
-    </View>
+      <Text>Loading Screen</Text>
+    </SafeAreaView>
     )
   }
 }

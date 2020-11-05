@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
 import * as Google from "expo-google-app-auth";
 import firebase from 'firebase';
 
@@ -36,7 +36,7 @@ export default class LoginScreen extends Component {
         firebase.auth().signInWithCredential(credential)
         .then((result) => {
           console.log('User Signed In');
-          console.log(result)
+          console.log('UserID:', result.user.uid);
           if (result.additionalUserInfo.isNewUser) {
             //Save each user under their own uniqueID and set details
             firebase.database().ref('/users/' + result.user.uid).set({
@@ -96,9 +96,9 @@ export default class LoginScreen extends Component {
 
   render() {
     return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Button title="Sign In With Google" onPress={() => this.signInWithGoogleAsync()}/>
-    </View>
+    </SafeAreaView>
     );
   }
 }
