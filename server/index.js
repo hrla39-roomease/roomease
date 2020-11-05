@@ -24,9 +24,10 @@ app.get('/api/household/:id', (req, res) => {
 // POST
 app.post('/signup', (req, res) => {
   // TO BE REPLACED FOR ACTUAL FIREBASE AUTH
-  const {name, birthday, pictureURL, firebaseAuthID} = req.body;
+  const {firstName, lastName , pictureURL, firebaseAuthID} = req.body;
   const newUser = new db.User({
-    name: name,
+    firstName: firstName,
+    lastName: lastName,
     // birthday: birthday,
     pictureURL: pictureURL,
     householdID: '',
