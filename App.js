@@ -23,13 +23,15 @@ export default class App extends React.Component {
   }
 }
 
-const AppSwitchNavigator = createSwitchNavigator({
-  LoadingScreen: LoadingScreen,
-  LoginScreen: LoginScreen,
-  DashboardScreen: DashboardScreen,
-  HouseholdConnect: HouseholdConnect,
-  Homepage: Homepage
-});
+const AppSwitchNavigator = createSwitchNavigator(
+  {
+    LoadingScreen: LoadingScreen,
+    LoginScreen: LoginScreen,
+    HouseholdConnect: HouseholdConnect,
+    Homepage: Homepage,
+    DashboardScreen: DashboardScreen
+  }
+);
 
 const AppNavigator = createAppContainer(AppSwitchNavigator);
 
