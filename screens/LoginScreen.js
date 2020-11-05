@@ -37,7 +37,7 @@ export default class LoginScreen extends Component {
         firebase.auth().signInWithCredential(credential)
         .then((result) => {
           console.log('User Signed In');
-          // console.log('ALVINS ID:', result.user);
+          // console.log('NICKS ID:', result.user.uid);
           // Checks if user is a new user.
           if (result.additionalUserInfo.isNewUser) {
             // Save each user under their own uniqueID and set details
