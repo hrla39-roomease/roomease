@@ -61,7 +61,8 @@ app.post('/api/household', (req, res) => {
     else {
       db.User.updateOne(
         { _id: userID },
-        { isHouseholdOwner: true },
+        { householdID: result._id,
+          isHouseholdOwner: true },
         (err, result) => {
           if (err) res.status(400).send(err);
           res.status(200).json(result);
