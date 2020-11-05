@@ -11,6 +11,7 @@ export default function HouseholdConnect(props) {
   const [createHouseholdModalVisible, setCreateHouseholdModalVisible] = useState(false);
   const [joinHouseholdModalVisible, setJoinHouseholdModalVisible] = useState(false);
   const [householdName, setHouseholdName] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
 
   return (
     <ImageBackground
@@ -63,8 +64,8 @@ export default function HouseholdConnect(props) {
             <Text style={modalStyles.modalText}>Paste your invite code:</Text>
             <TextInput
               style={modalStyles.inputField}
-              onChangeText={text => setHouseholdName(text)}
-              value={householdName}
+              onChangeText={text => setInviteCode(text)}
+              value={inviteCode}
               autoCapitalize={'words'}
               placeholder={'Invite Code'}
             />
