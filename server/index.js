@@ -10,8 +10,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // GET
-app.get('/signin', (req, res) => {
-
+app.get('/signin/:id', (req, res) => {
+  db.User.findOne({ firebaseAuthID: req.params.id }, (err, result) => {
+    if (err) res.status(400).send(err);
+    else res.status(200).json(result);
+  })
 });
 
 app.get('/api/household/:id', (req, res) => {
