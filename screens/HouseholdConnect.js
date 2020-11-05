@@ -1,40 +1,53 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground } from 'react-native'
 import colors from '../assets/colors.js';
+
+const backgroundImage = {
+  uri: 'https://mvp-roomease.s3-us-west-1.amazonaws.com/Rotondo+Great+Room+Rendering.jpg'
+};
 
 export default function HouseholdConnect(props) {
 
   console.log('PROPS:', props);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.h1}>Welcome!</Text>
-      <Text style={styles.paragraph}>Please create a household or join one if your roomie has already set one up.</Text>
-      <AppButton title='Create A Household' buttonStyle={buttonStyles.buttonContainer} textStyle={buttonStyles.buttonText}/>
-      <AppButton title='Join A Household' buttonStyle={buttonStyles.secondaryButtonContainer} textStyle={buttonStyles.secondaryButtonText}/>
-    </View>
+    <ImageBackground
+      source={backgroundImage}
+      style={styles.background}
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.h1}>Welcome!</Text>
+        <Text style={styles.paragraph}>Please create a household or join one if your roomie has already set one up.</Text>
+        <AppButton title='Create A Household' buttonStyle={buttonStyles.buttonContainer} textStyle={buttonStyles.buttonText}/>
+        <AppButton title='Join A Household' buttonStyle={buttonStyles.secondaryButtonContainer} textStyle={buttonStyles.secondaryButtonText}/>
+      </View>
+    </ImageBackground>
   )
 }
 
 // onPress={() => this.props.navigation.navigate('CreateHousehold')}
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: '#fff',
+    resizeMode: "cover",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.55)',
     alignItems: 'center',
-    paddingTop: 200,
+    justifyContent: "center"
   },
   h1: {
     color: colors.primaryBlue,
-    fontSize: 40,
+    fontSize: 42,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   paragraph: {
-    fontSize: 24,
+    fontSize: 26,
     marginBottom: '70%',
-    width: '70%',
+    width: '75%',
     textAlign: 'center',
     color: colors.darkGrey,
   },
@@ -59,9 +72,9 @@ const buttonStyles = StyleSheet.create({
     margin: 20,
   },
   secondaryButtonContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderColor: colors.primaryBlue,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 25,
     paddingVertical: 10,
     width: '70%',
