@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 export default function HouseholdConnect() {
   return (
     <View>
-      <Text></Text>
+      <Text>This is the household chooser</Text>
     </View>
   )
 }
