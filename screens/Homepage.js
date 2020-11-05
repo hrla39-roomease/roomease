@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-export default function Homepage() {
+export default function Homepage(props) {
 
-  const { navigation } = this.props;
+  const { navigation } = props;
   const firstName = navigation.getParam('firstName', '');
   const lastName = navigation.getParam('lastName', '');
   const firebaseAuthID = navigation.getParam('firebaseAuthID', '');
