@@ -21,10 +21,11 @@ export default class LoadingScreen extends React.Component {
       if (user) {
         axios.get(`http://localhost:3009/signin/${user.uid}`)
           .then((result) => {
+            console.log(result.data.householdID)
             if (result.data.householdID === '') {
               this.props.navigation.navigate('HouseholdConnect');
             } else {
-              this.props.navigation.navigate('Homepage', {
+              this.props.navigation.navigate('DashboardScreen', {
                 firstName: result.data.firstName,
                 lastName: result.data.lastName,
                 firebaseAuthID: result.data.firebaseAuthID,
