@@ -34,7 +34,7 @@ const expenseSchema = new mongoose.Schema({
 // subdocument
 const grocerySchema = new mongoose.Schema({
   name: String,
-  quantity: String,
+  quantity: mongoose.Types.Decimal128,
   quantityType: String,
 })
 
