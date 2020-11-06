@@ -34,7 +34,7 @@ const expenseSchema = new mongoose.Schema({
 // subdocument
 const grocerySchema = new mongoose.Schema({
   name: String,
-  quantity: mongoose.Types.Decimal128,
+  quantity: String,
   quantityType: String,
 })
 
@@ -44,6 +44,7 @@ const householdSchema = new mongoose.Schema({
   chores: [],
   expenses: [],
   groceries: [],
+  users: [],
 });
 
 const User = mongoose.model('User', userSchema);

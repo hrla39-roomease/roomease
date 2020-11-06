@@ -18,7 +18,7 @@ app.get('/signin/:id', (req, res) => {
 });
 
 app.get('/api/household/:id', (req, res) => {
-  db.Household.find({ _id: req.params.id }, (err, result) => {
+  db.Household.findOne({ _id: req.params.id }, (err, result) => {
     if (err) res.status(400).send(err);
     else res.status(200).json(result);
   })
@@ -46,13 +46,14 @@ app.post('/signup', (req, res) => {
 
 // User creates household
 app.post('/api/household', (req, res) => {
-  const { name, householdOwner, userID } = req.body;
+  const { name, householdOwner, firstName, userID } = req.body;
   const newHousehold = new db.Household({
     name: name,
     householdOwner: householdOwner,
     chores: [],
     expenses: [],
     groceries: [],
+    users: [householdOwner],
   });
 
   // creates new household and updates user as owner of household.
@@ -130,13 +131,22 @@ app.post('/api/grocery', (req, res) => {
 // PUT
 // add user to household
 app.put('/api/user/:id', (req, res) => {
-  const { householdID } = req.body;
+  const { householdID, firstName } = req.body;
   db.User.updateOne(
     { _id: req.params.id },
-    { householdID: req.body.householdID },
+    { householdID: householdID },
     (err, result) => {
       if (err) res.status(400).send(err);
-      else res.status(200).json(result);
+      else {
+        db.Household.updateOne(
+          { _id: householdID },
+          { $push: { users: firstName } },
+          (err, result) => {
+            if (err) res.status(400).send(err);
+            else res.status(200).json(result);
+          }
+        )
+      }
     }
   )
 })
