@@ -44,6 +44,7 @@ const householdSchema = new mongoose.Schema({
   chores: [],
   expenses: [],
   groceries: [],
+  users: [],
 });
 
 const User = mongoose.model('User', userSchema);
