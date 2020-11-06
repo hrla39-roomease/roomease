@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput} from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddExpenseScreen  from './AddExpenseScreen.js';
 
@@ -14,6 +14,22 @@ function HomeExpenseScreen({navigation}) {
     color="black"
     title="Add an expense"
     onPress={() => navigation.navigate('Add Expense Screen')}
+  />
+
+  <FlatList
+    data={[
+      {key: 'Devin'},
+      {key: 'Dan'},
+      {key: 'Dominic'},
+      {key: 'Jackson'},
+      {key: 'James'},
+      {key: 'Joel'},
+      {key: 'John'},
+      {key: 'Jillian'},
+      {key: 'Jimmy'},
+      {key: 'Julie'},
+    ]}
+    renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
   />
 
   <Text>Nick, Water Bill, $50</Text>

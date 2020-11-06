@@ -6,7 +6,6 @@ import LoadingScreen from './screens/LoadingScreen.js';
 import LoginScreen from './screens/LoginScreen.js';
 import DashboardScreen from './screens/DashboardScreen.js';
 import ExpenseNavigator from './screens/ExpenseNavigator.js';
-// import Homepage from './screens/Homepage.js';
 import HouseholdConnect from './screens/HouseholdConnect.js';
 import firebase from 'firebase';
 import { firebaseConfig } from './config';
