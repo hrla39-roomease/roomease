@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, TouchableOpacity, StatusBar, FlatList, TouchableHighlight, Modal} from 'react-native';
+import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, TouchableOpacity, StatusBar, FlatList, TouchableHighlight, Modal, CheckBox} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import colors from '../assets/colors.js';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 const Stack = createStackNavigator();
 
@@ -88,6 +89,8 @@ export default function HomeExpenseScreen ({navigation}) {
     const [addItemModalVisible, setAddItemModalVisible] = useState(false);
     const [itemName, setItemName] = useState('');
     const [cost, setCost] = useState('');
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+
 
   return (
     <View style={styles.container}>
