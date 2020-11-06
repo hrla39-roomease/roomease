@@ -7,8 +7,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import ChoresNavigator from './ChoresNavigator.js';
 import GroceriesNavigator from './GroceriesNavigator.js';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
 import ExpenseNavigator from './ExpenseNavigator.js';
 import colors from '../assets/colors.js';
 
