@@ -100,7 +100,6 @@ export default function DashboardScreen(props) {
         />
         <Tabs.Screen
           name="Chores"
-          component={ChoresNavigator}
           children={() => <ChoresNavigator
             firstName={firstName}
             householdID={householdID}
