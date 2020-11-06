@@ -7,8 +7,14 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import ChoresNavigator from './ChoresNavigator.js';
 import GroceriesNavigator from './GroceriesNavigator.js';
+<<<<<<< HEAD
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+=======
 import ExpenseNavigator from './ExpenseNavigator.js';
 import colors from '../assets/colors.js';
+>>>>>>> 74c4b5ebed09500c0328dcc17ee9054b81eaff1f
 
 const Tabs = createBottomTabNavigator();
 
