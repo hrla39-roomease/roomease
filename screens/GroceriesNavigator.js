@@ -14,7 +14,7 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 
-import colors from "../assets/colors";
+import colors from '../assets/colors';
 
 export default function HomeGroceriesScreen({navigation}) {
 
@@ -112,7 +112,7 @@ const headerStyles = StyleSheet.create({
   header: {
     backgroundColor: colors.primaryDark,
     width: '100%',
-    height: '11.5%',
+    height: '11.25%',
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
