@@ -77,8 +77,8 @@ export default function ChoresNavigator(props) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {chores.map(chore => (
-          <Text> {chore.chore} Finish on {`${chore.due}`} {chore.assignedTo} </Text>
+        {chores.map((chore, index) => (
+          <Text style={{borderStyle: 'solid', borderWidth: '1px', margin: 1}} key={index} > {chore.chore} Finish on {`${chore.due}`} - {chore.assignedTo}</Text>
         ))}
       </ScrollView>
       <Text style={styles.text}>Add New Chore!</Text>
