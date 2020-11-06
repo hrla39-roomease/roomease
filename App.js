@@ -24,7 +24,7 @@ const AppSwitchNavigator = createSwitchNavigator(
   {
     LoadingScreen: LoadingScreen,
     LoginScreen: LoginScreen,
-    // HouseholdConnect: HouseholdConnect,
+    HouseholdConnect: HouseholdConnect,
     DashboardScreen: DashboardScreen
   }
 );
