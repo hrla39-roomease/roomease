@@ -60,7 +60,7 @@ export default function HouseholdConnect(props) {
               placeholder={'Household Name'}
             />
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
               style={modalStyles.submitButton}
               onPress={() => {
                 axios.post('http://localhost:3009/api/household', {
@@ -78,7 +78,7 @@ export default function HouseholdConnect(props) {
               <Text style={modalStyles.textStyle}>Submit</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
               style={modalStyles.cancelButton}
               onPress={() => {
                 setCreateHouseholdModalVisible(!createHouseholdModalVisible)}
@@ -109,7 +109,7 @@ export default function HouseholdConnect(props) {
               placeholder={'Invite Code'}
             />
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
               style={modalStyles.submitButton}
               onPress={() => {
                 axios.get(`http://localhost:3009/api/household/${inviteCode}`)
@@ -130,7 +130,7 @@ export default function HouseholdConnect(props) {
               <Text style={modalStyles.textStyle}>Submit</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
               style={modalStyles.cancelButton}
               onPress={() => {
                 setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   h1: {
-    color: colors.primaryBlue,
+    color: colors.primary,
     fontSize: 42,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     marginBottom: '70%',
     width: '75%',
     textAlign: 'center',
-    color: colors.darkGrey,
+    color: colors.neutralDark,
   },
 })
 
@@ -193,7 +193,7 @@ const AppButton = ({ onPress, title, buttonStyle, textStyle }) => (
 
 const buttonStyles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: colors.primaryBlue,
+    backgroundColor: colors.primary,
     borderRadius: 25,
     paddingVertical: 10,
     width: '70%',
@@ -202,7 +202,7 @@ const buttonStyles = StyleSheet.create({
   },
   secondaryButtonContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderColor: colors.primaryBlue,
+    borderColor: colors.primary,
     borderWidth: 1,
     borderRadius: 25,
     paddingVertical: 10,
@@ -216,7 +216,7 @@ const buttonStyles = StyleSheet.create({
   },
   secondaryButtonText: {
     fontSize: 24,
-    color: colors.primaryBlue,
+    color: colors.primary,
     alignSelf: 'center',
   }
 })
@@ -247,7 +247,7 @@ const modalStyles = StyleSheet.create({
     elevation: 5
   },
   submitButton: {
-    backgroundColor: colors.primaryBlue,
+    backgroundColor: colors.primary,
     borderRadius: 20,
     padding: 10,
     width: '40%',
@@ -258,7 +258,7 @@ const modalStyles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: colors.primaryBlue,
+    borderColor: colors.primary,
     padding: 10,
     width: '40%',
     elevation: 2
@@ -271,7 +271,7 @@ const modalStyles = StyleSheet.create({
   },
   cancelText: {
     fontSize: 16,
-    color: colors.primaryBlue,
+    color: colors.primary,
     fontWeight: 'bold',
     textAlign: 'center'
   },
@@ -284,7 +284,7 @@ const modalStyles = StyleSheet.create({
   inputField: {
     fontSize: 20,
     height: 45,
-    borderColor: colors.lightGrey,
+    borderColor: colors.neutralLight,
     borderRadius: 25,
     borderWidth: 1,
     width: '100%',

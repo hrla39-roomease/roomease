@@ -20,7 +20,6 @@ export default function ChoresNavigator () {
   )
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
