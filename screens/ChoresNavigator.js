@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 function HomeChoresScreen({navigation}) {
+  // console.log('chores navigation', navigation);
   return (
     <View style={styles.container}>
     <Text>Hello Chores</Text>
@@ -12,7 +13,9 @@ function HomeChoresScreen({navigation}) {
   )
 }
 
-export default function ChoresNavigator () {
+
+export default function ChoresNavigator (props) {
+  console.log(`chores:`, props);
   return (
     <Stack.Navigator>
       <Stack.Screen name="Chores" component={HomeChoresScreen} />
