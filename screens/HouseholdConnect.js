@@ -10,6 +10,7 @@ import {
   TouchableHighlight,
   TextInput,
 } from 'react-native';
+import axios from "axios";
 
 import colors from '../assets/colors.js';
 
@@ -18,6 +19,10 @@ const backgroundImage = {
 };
 
 export default function HouseholdConnect(props) {
+
+  const { navigation } = props;
+  const firstName = navigation.getParam('firstName', '');
+  const id = navigation.getParam('id', '');
 
   const [
     createHouseholdModalVisible,
@@ -41,8 +46,7 @@ export default function HouseholdConnect(props) {
         transparent={true}
         visible={createHouseholdModalVisible}
         // onRequestClose={() => {
-          // Axios put request then:
-        //   this.props.navigation.navigate('Homepage');
+        //   props.navigation.navigate('page');
         // }}
       >
         <View style={modalStyles.centeredView}>
@@ -56,12 +60,32 @@ export default function HouseholdConnect(props) {
               placeholder={'Household Name'}
             />
             <TouchableHighlight
+              underlayColor={colors.primaryLighterBlue}
               style={modalStyles.submitButton}
               onPress={() => {
+                axios.post('http://localhost:3009/api/household', {
+                  name: householdName,
+                  householdOwner: firstName,
+                  userID: id,
+                })
+                  .then((result) => {
+                    console.log('Sucessfully posted household');
+                    props.navigation.navigate('DashboardScreen');
+                  })
+                  .catch((err) => console.error(err));
                 setCreateHouseholdModalVisible(!createHouseholdModalVisible)}
               }
             >
               <Text style={modalStyles.textStyle}>Submit</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={colors.primaryLighterBlue}
+              style={modalStyles.cancelButton}
+              onPress={() => {
+                setCreateHouseholdModalVisible(!createHouseholdModalVisible)}
+              }
+            >
+              <Text style={modalStyles.cancelText}>Cancel</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -87,6 +111,7 @@ export default function HouseholdConnect(props) {
               placeholder={'Invite Code'}
             />
             <TouchableHighlight
+              underlayColor={colors.primaryLighterBlue}
               style={modalStyles.submitButton}
               onPress={() => {
                 setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
@@ -112,8 +137,6 @@ export default function HouseholdConnect(props) {
   // Post household
   // Get household by _id
   // Put household to user
-
-// onPress={() => this.props.navigation.navigate('CreateHousehold')}
 
 const styles = StyleSheet.create({
   background: {
@@ -210,11 +233,27 @@ const modalStyles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     width: '40%',
+    elevation: 2,
+    marginBottom: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.primaryBlue,
+    padding: 10,
+    width: '40%',
     elevation: 2
   },
   textStyle: {
     fontSize: 16,
     color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  cancelText: {
+    fontSize: 16,
+    color: colors.primaryBlue,
     fontWeight: 'bold',
     textAlign: 'center'
   },
@@ -225,6 +264,7 @@ const modalStyles = StyleSheet.create({
     textAlign: 'center'
   },
   inputField: {
+    fontSize: 20,
     height: 45,
     borderColor: colors.lightGrey,
     borderRadius: 25,
