@@ -46,7 +46,7 @@ export default function HouseholdConnect(props) {
         transparent={true}
         visible={createHouseholdModalVisible}
         // onRequestClose={() => {
-        //   props.navigation.navigate('page');
+        //   do something
         // }}
       >
         <View style={modalStyles.centeredView}>
@@ -69,7 +69,6 @@ export default function HouseholdConnect(props) {
                   userID: id,
                 })
                   .then((result) => {
-                    console.log('Sucessfully posted household');
                     props.navigation.navigate('DashboardScreen');
                   })
                   .catch((err) => console.error(err));
@@ -96,8 +95,7 @@ export default function HouseholdConnect(props) {
         transparent={true}
         visible={joinHouseholdModalVisible}
         // onRequestClose={() => {
-          // Axios put request then:
-        //   this.props.navigation.navigate('Homepage');
+          // do something
         // }}
       >
         <View style={modalStyles.centeredView}>
@@ -114,10 +112,30 @@ export default function HouseholdConnect(props) {
               underlayColor={colors.primaryLighterBlue}
               style={modalStyles.submitButton}
               onPress={() => {
-                setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
+                axios.get(`http://localhost:3009/api/household/${inviteCode}`)
+                  .then((household) => {
+                    axios.put(`http://localhost:3009/api/user/${id}`, {
+                      householdID: household.data._id
+                    })
+                    .then((result) => {
+                      props.navigation.navigate('DashboardScreen');
+                      })
+                      .catch((err) => console.error(err));
+                  })
+                  .catch((err) => console.error(err));
+                  setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
               }
             >
               <Text style={modalStyles.textStyle}>Submit</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={colors.primaryLighterBlue}
+              style={modalStyles.cancelButton}
+              onPress={() => {
+                setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
+              }
+            >
+              <Text style={modalStyles.cancelText}>Cancel</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -134,7 +152,6 @@ export default function HouseholdConnect(props) {
 }
 
 // Routes needed:
-  // Post household
   // Get household by _id
   // Put household to user
 

@@ -18,7 +18,7 @@ app.get('/signin/:id', (req, res) => {
 });
 
 app.get('/api/household/:id', (req, res) => {
-  db.Household.find({ _id: req.params.id }, (err, result) => {
+  db.Household.findOne({ _id: req.params.id }, (err, result) => {
     if (err) res.status(400).send(err);
     else res.status(200).json(result);
   })
