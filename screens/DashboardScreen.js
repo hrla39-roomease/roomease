@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ChoresNavigator from './ChoresNavigator.js';
 import GroceriesNavigator from './GroceriesNavigator.js';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 

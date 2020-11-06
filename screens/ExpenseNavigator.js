@@ -3,71 +3,131 @@ import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, 
 import { createStackNavigator } from '@react-navigation/stack';
 import AddExpenseScreen  from './AddExpenseScreen.js';
 import colors from '../assets/colors.js';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const Stack = createStackNavigator();
 
-const DATA = [
+const FixedExpenses = [
   {
     id: "1",
-    name: "Nick",
+    expenseItem: "Rent",
+    user: "Alphina",
+    cost: "$3,200.00"
   },
   {
     id: "2",
-    name: "Alvin",
+    expenseItem: "Water",
+    user: "Alvin",
+    cost: "$64.35"
   },
   {
     id: "3",
-    name: "Alphina",
-  },
+    expenseItem: "Internet",
+    user: "Nick",
+    cost: "$75.99"
+  }
 ];
 
-const Item = ({ item, onPress, style }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-    <Text style={styles.name}>{item.name}</Text>
-  </TouchableOpacity>
-);
+const OtherExpenses = [
+  {
+    id: "1",
+    expenseItem: "Costco Run",
+    user: "Alphina",
+    cost: "$105.60"
+  },
+  {
+    id: "2",
+    expenseItem: "Pizza Night",
+    user: "Alvin",
+    cost: "$42.89"
+  },
+  {
+    id: "3",
+    expenseItem: "Concert Tickets",
+    user: "Nick",
+    cost: "$455.03"
+  }
+];
+
+function Item({expenseItem, user, cost}) {
+  return (
+    <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
+      <View style={{ flex: 1, justifyContent: 'center'}}>
+        <Text style={styles.listExpenseItem}>{expenseItem}</Text>
+        <Text style={styles.listUser}>{user}</Text>
+      </View>
+      <Text style={styles.listCost}>{cost}</Text>
+    </View>
+  );
+}
+
+
+// function Other({expenseItem, user, cost}) {
+//   return (
+//     <View style={{flex: 1, flexDirection: "row", marginLeft: 15, marginRight: 15, marginTop: 10, marginBottom: 10}}>
+//       <View style={{ flex: 1, justifyContent: 'center'}}>
+//         <Text style={styles.listExpenseItem}>{expenseItem}</Text>
+//         <Text style={styles.listUser}>{user}</Text>
+//       </View>
+//       <Text style={styles.listCost}>{cost}</Text>
+//     </View>
+//   );
+// }
 
 function HomeExpenseScreen({navigation}) {
-  const [selectedId, setSelectedId] = useState(null);
-  const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? colors.primaryBlue : colors.mediumGrey;
-
-    return (
-      <Item
-        item={item}
-        onPress={() => setSelectedId(item.id)}
-        style={{ backgroundColor }}
-      />
-    );
-  };
-
   return (
-    <View style={styles.container}>
-    <Text>Hello Expense Screen</Text>
 
-  <Button
-    color="black"
-    title="Add an expense"
-    onPress={() => navigation.navigate('Add Expense Screen')}
-  />
-  <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedId}
+    <View style={styles.container, {marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 10}}>
+
+      <SafeAreaView
+        style={styles.header}
+        leftComponent={{ icon: 'plus'}} />
+
+      <Button
+        style={styles.addButton}
+        color="black"
+        title="+"
+        onPress={() => navigation.navigate('Add Expense Screen')}
       />
 
-  </View>
+      <Text style={{fontSize: 20, color: "gray"}}>Fixed Monthly Expenses</Text>
+      <FlatList data={FixedExpenses} renderItem={({item}) => (
+        <Item expenseItem={item.expenseItem} user={item.user} cost={item.cost}/>
+      )}/>
+
+      <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Other Household Expenses</Text>
+      <FlatList data={OtherExpenses} renderItem={({item}) => (
+        <Item expenseItem={item.expenseItem} user={item.user} cost={item.cost}/>
+      )}/>
+
+      <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Your Share</Text>
+
+
+    </View>
   )
 }
 
 export default function ExpenseNavigator () {
 
   return (
+
     <Stack.Navigator>
-      <Stack.Screen name="Expenses" component={HomeExpenseScreen} />
+      <Stack.Screen
+      name="Expenses"
+      component={HomeExpenseScreen}
+      options={{
+        headerStyle: {
+          backgroundColor: colors.primaryDark,
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontSize: 30
+        },
+      }}
+      />
       <Stack.Screen name="Add Expense Screen" component={AddExpenseScreen}/>
     </Stack.Navigator>
+
   );
 
 }
@@ -78,12 +138,26 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
   },
-  name: {
-    fontSize: 32,
+  addButton: {
+    fontSize: 200
   },
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  listItem: {
+    flexDirection: "row",
   },
+ listExpenseItem: {
+    fontSize: 16,
+    alignItems: "flex-start"
+  },
+  listUser: {
+    fontSize: 12,
+    alignItems: "flex-start",
+    color: colors.secondary
+  },
+  listCost: {
+    fontSize: 17,
+    alignItems: "flex-end"
+  },
+  header: {
+    color: colors.primaryDark
+  }
 });
