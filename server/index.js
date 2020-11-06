@@ -131,13 +131,22 @@ app.post('/api/grocery', (req, res) => {
 // PUT
 // add user to household
 app.put('/api/user/:id', (req, res) => {
-  const { householdID } = req.body;
+  const { householdID, firstName } = req.body;
   db.User.updateOne(
     { _id: req.params.id },
-    { householdID: req.body.householdID },
+    { householdID: householdID },
     (err, result) => {
       if (err) res.status(400).send(err);
-      else res.status(200).json(result);
+      else {
+        db.Household.updateOne(
+          { _id: householdID },
+          { $push: { users: firstName } },
+          (err, result) => {
+            if (err) res.status(400).send(err);
+            else res.status(200).json(result);
+          }
+        )
+      }
     }
   )
 })
