@@ -115,7 +115,8 @@ export default function HouseholdConnect(props) {
                 axios.get(`http://localhost:3009/api/household/${inviteCode}`)
                   .then((household) => {
                     axios.put(`http://localhost:3009/api/user/${id}`, {
-                      householdID: household.data._id
+                      householdID: household.data._id,
+                      firstName: firstName
                     })
                     .then((result) => {
                       props.navigation.navigate('DashboardScreen');
