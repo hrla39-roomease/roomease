@@ -28,12 +28,12 @@ export default class LoadingScreen extends React.Component {
               });
             } else {
               this.props.navigation.navigate('DashboardScreen', {
-                firstName: result.data.firstName,
-                lastName: result.data.lastName,
-                firebaseAuthID: result.data.firebaseAuthID,
-                householdID: result.data.householdID,
-                isHouseholdOwner: result.data.isHouseholdOwner,
-                pictureURL: result.data.pictureURL,
+                // firstName: result.data.firstName,
+                // lastName: result.data.lastName,
+                // firebaseAuthID: result.data.firebaseAuthID,
+                // householdID: result.data.householdID,
+                // isHouseholdOwner: result.data.isHouseholdOwner,
+                // pictureURL: result.data.pictureURL,
               });
             }
           })
