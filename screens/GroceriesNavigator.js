@@ -16,7 +16,7 @@ import axios from 'axios';
 
 import colors from '../assets/colors';
 
-export default function HomeGroceriesScreen({navigation}) {
+export default function HomeGroceriesScreen(props) {
 
   // STATE:
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
@@ -36,7 +36,7 @@ export default function HomeGroceriesScreen({navigation}) {
         </View>
         <View style={headerStyles.right}>
           <TouchableHighlight
-            underlayColor={colors.primaryLighterBlue}
+            underlayColor={colors.primaryLighter}
             onPress={() => {
               setAddItemModalVisible(!addItemModalVisible)
             }}
@@ -90,7 +90,19 @@ export default function HomeGroceriesScreen({navigation}) {
                 style={modalStyles.submitButton}
                 onPress={() => {
                   console.log(itemName, typeof(quantity), quantityType)
-                  setAddItemModalVisible(!addItemModalVisible)
+                  axios.post('http://localhost:3009/api/grocery', {
+                    name: itemName,
+                    quantity: quantity,
+                    quantityType: quantityType,
+                    householdID: props.householdID
+                  })
+                    .then((result) => {
+                      setAddItemModalVisible(!addItemModalVisible);
+                      setItemName('');
+                      setQuantity('');
+                      setQuantityType('');
+                    })
+                    .catch((err) => console.error(err))
                 }}
               >
                 <Text style={modalStyles.textStyle}>Submit</Text>
@@ -153,16 +165,13 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginTop: 22,
   },
   modalView: {
     width: '90%',
     backgroundColor: '#fff',
     borderRadius: 25,
     padding: 35,
-    // paddingTop: '50%',
     alignItems: 'center',
-    // justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -171,6 +180,12 @@ const modalStyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5
+  },
+  modalText: {
+    fontSize: 24,
+    color: colors.primaryDark,
+    marginBottom: 26,
+    textAlign: 'center'
   },
   buttonsContainer: {
     width: '100%',
@@ -208,12 +223,6 @@ const modalStyles = StyleSheet.create({
     fontSize: 16,
     color: colors.primary,
     fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    fontSize: 24,
-    // marginTop: 70,
-    marginBottom: 26,
     textAlign: 'center'
   },
   inputField: {
