@@ -33,20 +33,32 @@ export default function HomeGroceriesScreen(props) {
   const GroceryList = props.groceries.map((grocery, index) => {
     return (
       <View style={listStyles.listItemContainer} key={index}>
-        <View style={listStyles.itemAndQuantityContainer}
-          onPress={() => {
-            axios.put(`http://localhost:3009/api/grocery/${grocery._id}`)
-              .then((result) => props.fetchData())
-              .catch((err) => console.error(err))
-          }}
-        >
+        <View style={listStyles.itemAndQuantityContainer}>
           <FontAwesome5
             name={ grocery.isPurchased ? "check-circle" : "circle"}
-            size={22}
-            color={colors.neutralMedium}
+            size={24}
+            color={ grocery.isPurchased ? colors.neutralMedium : colors.primary}
+            onPress={() => {
+              axios.put(`http://localhost:3009/api/grocery/${grocery._id}`, {
+                trueOrFalse: !grocery.isPurchased
+              })
+                .then((result) => props.fetchData())
+                .catch((err) => console.error(err))
+            }}
           />
-          <Text style={listStyles.item}>{grocery.name}</Text>
-          <Text style={listStyles.quantity}>({grocery.quantity} {grocery.quantityType})</Text>
+          <Text
+            style={
+              grocery.isPurchased ? listStyles.itemChecked : listStyles.item
+            }
+          >
+            {grocery.name}
+          </Text>
+          <Text style={
+              grocery.isPurchased ? listStyles.quantityChecked : listStyles.quantity
+            }
+          >
+            ({grocery.quantity} {grocery.quantityType})
+          </Text>
         </View>
         <View style={listStyles.trashContainer}>
           <TouchableOpacity onPress={() => {
@@ -235,14 +247,27 @@ const listStyles = StyleSheet.create({
   },
   item: {
     marginLeft: 8,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '500',
     color: colors.neutralDark,
   },
+  itemChecked: {
+    marginLeft: 8,
+    fontSize: 18,
+    fontWeight: '500',
+    color: colors.neutralMedium,
+    textDecorationLine: "line-through",
+  },
   quantity: {
-    fontSize: 16,
-    color: colors.primaryLight,
+    fontSize: 18,
+    color: colors.neutralMedium,
     marginLeft: 6,
+  },
+  quantityChecked: {
+    fontSize: 18,
+    color: colors.neutralLight,
+    marginLeft: 6,
+    textDecorationLine: "line-through",
   },
 })
 
