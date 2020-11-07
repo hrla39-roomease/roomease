@@ -111,6 +111,7 @@ app.post('/api/expense', (req, res) => {
   )
 });
 
+// POST grocery item
 app.post('/api/grocery', (req, res) => {
   const {name, quantity, quantityType, householdID} = req.body;
 
@@ -118,6 +119,7 @@ app.post('/api/grocery', (req, res) => {
     name: name,
     quantity: quantity,
     quantityType: quantityType,
+    isPurched: false,
   });
 
   db.Household.updateOne(
@@ -129,6 +131,21 @@ app.post('/api/grocery', (req, res) => {
     }
   );
 });
+
+// DELETE grocery item
+app.delete('/api/grocery/:id', (req, res) => {
+  const itemID = req.params.id;
+  db.Household.updateOne({},
+    { $pull: { groceries: { _id: itemID } } },
+    { multi: true },
+    (err, result) => {
+      if (err) res.status(400).send(err);
+      else {
+        res.status(200).json(result);
+      }
+    }
+  )
+})
 
 // PUT
 // add user to household
