@@ -28,6 +28,7 @@ const choreSchema = new mongoose.Schema({
 const expenseSchema = new mongoose.Schema({
   name: String,
   amount: mongoose.Types.Decimal128,
+  expenseType: String,
   expenseHolder: String,
 });
 
