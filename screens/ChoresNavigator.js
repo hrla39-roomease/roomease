@@ -1,38 +1,102 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, Platform, ScrollView, ActionSheetIOS} from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  SafeAreaView,
+  TouchableHighlight,
+  Modal,
+  Alert,
+  TextInput,
+  Platform,
+  ScrollView,
+  ActionSheetIOS
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { FontAwesome5 } from '@expo/vector-icons';
+import dayjs from 'dayjs';
+import weekday from 'dayjs/plugin/weekday';
+import isToday from 'dayjs/plugin/isToday';
+import axios from 'axios';
 
-
-// const Stack = createStackNavigator();
-
-// function HomeChoresScreen({navigation}) {
-//   // console.log('chores navigation', navigation);
-//   return (
-//     <View style={styles.container}>
-//     <Text>Hello Chores</Text>
-//     {/* Today chores */}
-//     {/* Tomorrow chores */}
-//     {/* More chores */}
-//     </View>
-//   )
-// }
-
+import colors from '../assets/colors';
 
 export default function ChoresNavigator(props) {
-  // console.log(`chores:`, props);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(true);
   const [newChore, setNewChore] = useState('');
   const [assignedUser, setAssignedUser] = useState('Pick a person');
-  const [chores, setChores] = useState([]);
+  const [chores, setChores] = useState(props.chores);
+  const [addItemModalVisible, setAddItemModalVisible] = useState(false);
+
+  const testDayjs = () => {
+    dayjs.extend(isToday);
+
+    console.log('YA CHORES', chores);
+    var today = new Date();
+    var dayjss = dayjs(new Date());
+    console.log(dayjss);
+    var testObj = new Date(chores[0].date);
+    console.log ('testobj', new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(testObj));
+    console.log('todays date', today.getDate());
+    console.log('are they the same day?', testObj.getDate() == today.getDate());
+
+    let todayChores = chores.filter(chore => {
+      let currDateObj = new Date(chore.date);
+      if (today.getDate() == currDateObj.getDate()) {
+        return true;
+      }
+    })
+    console.log('todayChores variable', todayChores);
+  };
+
+  const showDaysAndChores = () => {
+    const dayInWordFormat = (day) => new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(day);
+    const month = (month) => new Intl.DateTimeFormat('en-US', { month: 'long' }).format(month);
+    let day = new Date(); //starts by today
+
+    let week = [];
+    for (let i = 0; i < 6; i++) {
+      week.push({
+        wordDay: dayInWordFormat(day),
+        month: month(day),
+        day: day.getDate(),
+      })
+      day.setDate(day.getDate() + 1);
+    }
+
+    return week.map((day, index) => {
+      let choresOfDay = chores.filter(chore => {
+        let choreDay = new Date(chore.date);
+        let choreWordDay = dayInWordFormat(choreDay);
+        let choreMonth = dayInWordFormat(choreDay);
+        if (choreWordDay === day.wordDay) {
+          return true;
+        }
+      })
+      return (
+        <View style={mainStyles.dateHeader} key={index}>
+          <Text style={mainStyles.dateText}>{day.wordDay}, {day.month} {day.day}</Text>
+          {choresOfDay.map((chore, index) => (
+            <View style={mainStyles.choreContainer} key={index}>
+              <Text style={mainStyles.choreName}>{chore.name}</Text>
+              <Text style={mainStyles.userChore}>{chore.choreHolder}</Text>
+            </View>
+          ))}
+        </View>
+      )
+    })
+
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+    console.log(`ios Date: ${currentDate}`);
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    console.log(`${date}`);
   };
 
   const showMode = (currentMode) => {
@@ -44,10 +108,14 @@ export default function ChoresNavigator(props) {
     showMode('date');
   };
 
-  // const submitDate = () => {
-  //   setShow(false);
-  //   console.log(date);
-  // }
+  const listDays = () => {
+    dayjs.extend(weekday);
+    let days;
+    for (let i = 1; i <= 7; i++) {
+      days += `${dayjs().weekday(i).format('dddd').toString()}\n`
+    }
+    return days;
+  }
 
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -70,61 +138,245 @@ export default function ChoresNavigator(props) {
     );
 
     const onSubmit = () => {
-      setChores([...chores, {chore: newChore, due: date, assignedTo: assignedUser}])
+      axios.post('http://localhost:3009/api/chore', {
+        name: newChore,
+        date: date,
+        choreHolder: assignedUser,
+        householdID: props.householdID
+      })
+        .then(result => console.log('success'))
+        .catch(err => console.error(err));
+      // setChores([...chores, {chore: newChore, due: date, assignedTo: assignedUser}])
       setNewChore('');
       setAssignedUser('Pick a person');
     }
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        {chores.map((chore, index) => (
-          <Text style={{borderStyle: 'solid', borderWidth: '1px', margin: 1}} key={index} > {chore.chore} Finish on {`${chore.due}`} - {chore.assignedTo}</Text>
-        ))}
-      </ScrollView>
-      <Text style={styles.text}>Add New Chore!</Text>
-      <TextInput
-        style={{ height: 40, backgroundColor: 'lightgray', textAlign: 'center' }}
-        placeholder="Wash the dishes"
-        onChangeText={newChore => setNewChore(newChore)}
-        defaultValue={newChore}
-      />
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-      <View >
-        <Button onPress={onPress} title="Assign Chore" />
-        <Text>Chore assigned to: {assignedUser}</Text>
-      </View>
+    <View style={styles.container}>
+      {/* HEADER */}
+      <SafeAreaView style={headerStyles.header}>
+        <View style={headerStyles.left}>
+          <Text style={headerStyles.headerText}></Text>
+        </View>
+        <View style={headerStyles.center}>
+          <Text style={headerStyles.headerTitle}>Chores</Text>
+        </View>
+        <View style={headerStyles.right}>
+          <TouchableHighlight
+            underlayColor={colors.primaryLighterBlue}
+            onPress={() => {
+              setAddItemModalVisible(!addItemModalVisible)
+            }}
+          >
+            <Text style={headerStyles.headerText}>Add Chore</Text>
+          </TouchableHighlight>
+        </View>
+      </SafeAreaView>
+      {/* MAIN SCREEN CONTENT */}
       <View>
-        {/* <Button onPress={showDatepicker} title="Show date picker!" /> */}
-        <Button onPress={onSubmit} title="submit" />
+        {showDaysAndChores()}
       </View>
-      {/* Today chores */}
-      {/* Tomorrow chores */}
-      {/* More chores */}
-    </SafeAreaView>
 
+      {/* MODAL */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={addItemModalVisible}
+      >
+        <View style={modalStyles.centeredView}>
+          <View style={modalStyles.modalView}>
+          <Text style={modalStyles.modalText}>Add a chore to the{'\n'}chores list:</Text>
+            <TextInput
+              style={modalStyles.inputField}
+              onChangeText={newChore => setNewChore(newChore)}
+              value={newChore}
+              autoCapitalize={'words'}
+              placeholder={'Add chore here'}
+            />
+            <View>
+              <Button onPress={onPress} title="Assign Chore" />
+              <Text style={modalStyles.modalText}>Chore assigned to: {assignedUser}</Text>
+            </View>
+            {/* show date picker */}
+            <TouchableHighlight style={modalStyles.datePicker}>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </TouchableHighlight>
 
-    // <Stack.Navigator>
-    //   <Stack.Screen name="Chores" component={HomeChoresScreen} />
-    // </Stack.Navigator>
+            <TouchableHighlight
+              underlayColor={colors.primaryLighterBlue}
+              style={modalStyles.submitButton}
+              onPress={() => {
+                onSubmit();
+                setAddItemModalVisible(!addItemModalVisible);
+              }}
+            >
+              <Text style={modalStyles.textStyle}>Submit</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={colors.primaryLighterBlue}
+              style={modalStyles.cancelButton}
+              onPress={() => {
+                setAddItemModalVisible(!addItemModalVisible)
+              }}
+            >
+              <Text style={modalStyles.cancelText}>Cancel</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+    </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     // alignItems: 'center',
+  },
+});
+
+const mainStyles = StyleSheet.create({
+  dateHeader: {
+    // flex: 0,
+    width: '100%',
+    flexDirection: 'column',
+  },
+  dateText: {
+    fontSize: 32,
+    backgroundColor: 'yellow',
+    textAlign: 'center',
+  },
+  choreContainer: {
+    padding: 5
+  },
+  choreName: {
+    fontSize: 24
+  },
+  userChore: {
+    fontSize: 16
+  }
+});
+
+const headerStyles = StyleSheet.create({
+  header: {
+    backgroundColor: colors.primaryDark,
+    width: '100%',
+    height: '11.25%',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
-  text: {
-    textAlign: 'center',
+  center: {
+    paddingBottom: 10,
+    flex: 2,
+    alignItems: 'center',
+  },
+  right: {
+    paddingBottom: 10,
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingRight: 12,
+  },
+  left: {
+    paddingBottom: 10,
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: 12,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: 'white',
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'normal',
+  },
+})
+
+const modalStyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    width: '90%',
+    height: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    padding: 35,
+    paddingTop: '50%',
+    alignItems: 'center',
+    // justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  submitButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 20,
+    padding: 10,
+    width: '40%',
+    elevation: 2,
+    marginBottom: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    padding: 10,
+    width: '40%',
+    elevation: 2
+  },
+  textStyle: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  cancelText: {
+    fontSize: 16,
+    color: colors.primary,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  modalText: {
+    fontSize: 24,
+    // marginTop: 40,
+    marginBottom: 26,
+    textAlign: 'center'
+  },
+  inputField: {
+    fontSize: 20,
+    height: 45,
+    borderColor: colors.neutralLight,
+    borderRadius: 25,
+    borderWidth: 1,
+    width: '100%',
+    marginBottom: 0,
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  datePicker: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'white'
   }
 });

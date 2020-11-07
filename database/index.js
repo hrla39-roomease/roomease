@@ -22,6 +22,7 @@ const choreSchema = new mongoose.Schema({
   name: String,
   date: Date,
   choreHolder: String,
+  isComplete: Boolean,
 });
 
 // subdocument

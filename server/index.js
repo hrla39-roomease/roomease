@@ -76,11 +76,12 @@ app.post('/api/household', (req, res) => {
 });
 
 app.post('/api/chore', (req, res) => {
-  const {name, date, choreHolder, user, householdID} = req.body;
+  const {name, date, choreHolder, householdID} = req.body;
   const newChore = new db.Chore({
     name: name,
     date: date,
     choreHolder: choreHolder,
+    isComplete: false,
   })
 
   db.Household.updateOne(
