@@ -13,17 +13,35 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import colors from '../assets/colors';
 
-export default function HomeGroceriesScreen({navigation}) {
+export default function HomeGroceriesScreen(props) {
+  // Available Props:
+  //   groceries (array)
+  //   householdID
 
   // STATE:
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
   const [itemName, setItemName] = useState('');
   const [quantity, setQuantity] = useState('');
   const [quantityType, setQuantityType] = useState('');
-  const [householdName, setHouseholdName] = useState('');
+
+  const GroceryList = props.groceries.map((grocery, index) => {
+    return (
+      <View style={listStyles.listItemContainer} key={index}>
+        <View style={listStyles.itemAndQuantityContainer}>
+          <FontAwesome5 name="circle" size={22} color={colors.neutralMedium} />
+          <Text style={listStyles.item}>{grocery.name}</Text>
+          <Text style={listStyles.quantity}>({grocery.quantity} {grocery.quantityType})</Text>
+        </View>
+        <View style={listStyles.trashContainer}>
+          <FontAwesome5 name="trash-alt" size={22} color={colors.neutralMedium} />
+        </View>
+      </View>
+    )
+  })
 
   return (
     <View style={styles.container}>
@@ -36,15 +54,23 @@ export default function HomeGroceriesScreen({navigation}) {
         </View>
         <View style={headerStyles.right}>
           <TouchableHighlight
-            underlayColor={colors.primaryLighterBlue}
+            underlayColor={colors.primaryLighter}
+            style={{ marginRight: 8 }}
             onPress={() => {
               setAddItemModalVisible(!addItemModalVisible)
             }}
           >
-            <Text style={headerStyles.headerText}>Add Item</Text>
+            <FontAwesome5 name="plus" size={18} color="white" />
           </TouchableHighlight>
         </View>
       </SafeAreaView>
+
+      <View style={listStyles.listContainer}>
+
+        {GroceryList}
+
+      </View>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -75,25 +101,39 @@ export default function HomeGroceriesScreen({navigation}) {
               autoCapitalize={'words'}
               placeholder={'Quantity Type'}
             />
-            <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
-              style={modalStyles.submitButton}
-              onPress={() => {
-                console.log(itemName, typeof(quantity), quantityType)
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-              <Text style={modalStyles.textStyle}>Submit</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
-              style={modalStyles.cancelButton}
-              onPress={() => {
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-              <Text style={modalStyles.cancelText}>Cancel</Text>
-            </TouchableHighlight>
+            <View style={modalStyles.buttonsContainer}>
+              <TouchableHighlight
+                underlayColor={colors.primaryLighter}
+                style={modalStyles.cancelButton}
+                onPress={() => {
+                  setAddItemModalVisible(!addItemModalVisible)
+                }}
+              >
+                <Text style={modalStyles.cancelText}>Cancel</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={colors.primaryLighter}
+                style={modalStyles.submitButton}
+                onPress={() => {
+                  console.log(itemName, typeof(quantity), quantityType)
+                  axios.post('http://localhost:3009/api/grocery', {
+                    name: itemName,
+                    quantity: quantity,
+                    quantityType: quantityType,
+                    householdID: props.householdID
+                  })
+                    .then((result) => {
+                      setAddItemModalVisible(!addItemModalVisible);
+                      setItemName('');
+                      setQuantity('');
+                      setQuantityType('');
+                    })
+                    .catch((err) => console.error(err))
+                }}
+              >
+                <Text style={modalStyles.textStyle}>Submit</Text>
+              </TouchableHighlight>
+            </View>
           </View>
         </View>
       </Modal>
@@ -123,7 +163,7 @@ const headerStyles = StyleSheet.create({
     alignItems: 'center',
   },
   right: {
-    paddingBottom: 10,
+    paddingBottom: 12,
     flex: 1,
     alignItems: 'flex-end',
     paddingRight: 12,
@@ -146,22 +186,56 @@ const headerStyles = StyleSheet.create({
   },
 })
 
+const listStyles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  listItemContainer: {
+    flexDirection: 'row',
+    marginLeft: 16,
+    marginRight: 16,
+    borderBottomWidth: 0.5,
+    borderColor: colors.neutralMedium,
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemAndQuantityContainer: {
+    flexDirection: 'row',
+    flex: 2,
+  },
+  trashContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  item: {
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.neutralDark,
+  },
+  quantity: {
+    fontSize: 16,
+    color: colors.primaryLight,
+    marginLeft: 4,
+  },
+})
+
 const modalStyles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
     width: '90%',
-    height: '90%',
     backgroundColor: '#fff',
     borderRadius: 25,
     padding: 35,
-    paddingTop: '50%',
     alignItems: 'center',
-    // justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -171,13 +245,26 @@ const modalStyles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
+  modalText: {
+    fontSize: 24,
+    color: colors.primaryDark,
+    marginBottom: 26,
+    textAlign: 'center'
+  },
+  buttonsContainer: {
+    width: '100%',
+    paddingTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   submitButton: {
     backgroundColor: colors.primary,
     borderRadius: 20,
     padding: 10,
     width: '40%',
     elevation: 2,
-    marginBottom: 8,
+    marginLeft: 4,
+    flex: 1,
   },
   cancelButton: {
     backgroundColor: '#fff',
@@ -186,7 +273,9 @@ const modalStyles = StyleSheet.create({
     borderColor: colors.primary,
     padding: 10,
     width: '40%',
-    elevation: 2
+    elevation: 2,
+    marginRight: 4,
+    flex: 1
   },
   textStyle: {
     fontSize: 16,
@@ -198,12 +287,6 @@ const modalStyles = StyleSheet.create({
     fontSize: 16,
     color: colors.primary,
     fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    fontSize: 24,
-    marginTop: 70,
-    marginBottom: 26,
     textAlign: 'center'
   },
   inputField: {

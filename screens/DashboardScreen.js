@@ -76,6 +76,7 @@ export default function DashboardScreen(props) {
         tabBarOptions={{
           activeTintColor: colors.primary,
           inactiveTintColor: colors.neutralMedium,
+          labelPosition: 'belowIcon',
         }}
       >
         <Tabs.Screen
@@ -116,7 +117,11 @@ export default function DashboardScreen(props) {
         />
         <Tabs.Screen
           name="Groceries"
-          component={GroceriesNavigator}
+          children={() => <GroceriesNavigator
+            groceries={groceries}
+            householdID={householdID}
+          />
+          }
           options={{
             tabBarLabel: 'Groceries',
             tabBarIcon: ({ color, size }) => (
