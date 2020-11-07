@@ -6,6 +6,7 @@ import {
   Image,
   Button,
   TouchableHighlight,
+  TouchableOpacity,
   SafeAreaView,
   Alert,
   TextInput,
@@ -20,7 +21,8 @@ import colors from '../assets/colors';
 export default function HomeGroceriesScreen(props) {
   // Available Props:
   //   groceries (array)
-  //   householdID
+  //   householdID (string)
+  //   fetchData (function)
 
   // STATE:
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
@@ -32,12 +34,23 @@ export default function HomeGroceriesScreen(props) {
     return (
       <View style={listStyles.listItemContainer} key={index}>
         <View style={listStyles.itemAndQuantityContainer}>
+
           <FontAwesome5 name="circle" size={22} color={colors.neutralMedium} />
           <Text style={listStyles.item}>{grocery.name}</Text>
           <Text style={listStyles.quantity}>({grocery.quantity} {grocery.quantityType})</Text>
         </View>
         <View style={listStyles.trashContainer}>
-          <FontAwesome5 name="trash-alt" size={22} color={colors.neutralMedium} />
+          <TouchableOpacity onPress={() => {
+            axios.delete(`http://localhost:3009/api/grocery/${grocery._id}`)
+              .then((result) => props.fetchData())
+              .catch((err) => console.error(err))
+          }}>
+            <FontAwesome5
+              name="trash-alt"
+              size={20}
+              color={colors.neutralMedium}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -53,7 +66,7 @@ export default function HomeGroceriesScreen(props) {
           <Text style={headerStyles.headerTitle}>Groceries</Text>
         </View>
         <View style={headerStyles.right}>
-          <TouchableHighlight
+          <TouchableOpacity
             underlayColor={colors.primaryLighter}
             style={{ marginRight: 8 }}
             onPress={() => {
@@ -61,7 +74,7 @@ export default function HomeGroceriesScreen(props) {
             }}
           >
             <FontAwesome5 name="plus" size={18} color="white" />
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
 
@@ -115,7 +128,6 @@ export default function HomeGroceriesScreen(props) {
                 underlayColor={colors.primaryLighter}
                 style={modalStyles.submitButton}
                 onPress={() => {
-                  console.log(itemName, typeof(quantity), quantityType)
                   axios.post('http://localhost:3009/api/grocery', {
                     name: itemName,
                     quantity: quantity,
@@ -123,6 +135,7 @@ export default function HomeGroceriesScreen(props) {
                     householdID: props.householdID
                   })
                     .then((result) => {
+                      props.fetchData();
                       setAddItemModalVisible(!addItemModalVisible);
                       setItemName('');
                       setQuantity('');
@@ -204,7 +217,7 @@ const listStyles = StyleSheet.create({
   },
   itemAndQuantityContainer: {
     flexDirection: 'row',
-    flex: 2,
+    flex: 11,
   },
   trashContainer: {
     flexDirection: 'row',
@@ -220,7 +233,7 @@ const listStyles = StyleSheet.create({
   quantity: {
     fontSize: 16,
     color: colors.primaryLight,
-    marginLeft: 4,
+    marginLeft: 6,
   },
 })
 
