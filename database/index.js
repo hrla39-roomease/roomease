@@ -38,6 +38,7 @@ const grocerySchema = new mongoose.Schema({
   name: String,
   quantity: String,
   quantityType: String,
+  isPurchased: Boolean,
 })
 
 const householdSchema = new mongoose.Schema({
@@ -61,4 +62,5 @@ module.exports = {
   Expense,
   Grocery,
   Household,
+  db,
 }

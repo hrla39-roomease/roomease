@@ -125,6 +125,7 @@ export default function DashboardScreen(props) {
           children={() => <GroceriesNavigator
             groceries={groceries}
             householdID={householdID}
+            fetchData={fetchData}
           />
           }
           options={{
