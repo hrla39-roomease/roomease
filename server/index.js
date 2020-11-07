@@ -150,11 +150,12 @@ app.delete('/api/grocery/:id', (req, res) => {
 // PUT mark grocery item as bought
 app.put('/api/grocery/:id', (req, res) => {
   const itemID = req.params.id;
+  const trueOrFalse = req.body.trueOrFalse
   db.Household.updateOne(
     { "groceries._id": itemID },
     {
       "$set": {
-        "groceries.$.isPurchased": true
+        "groceries.$.isPurchased": trueOrFalse
       }
     },
     (err, result) => {
