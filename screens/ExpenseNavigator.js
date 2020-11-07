@@ -8,63 +8,6 @@ import { Feather } from '@expo/vector-icons';
 
 const Stack = createStackNavigator();
 
-const FixedExpenses = [
-  {
-    id: "1",
-    expenseItem: "Rent",
-    user: "Alphina",
-    cost: "$3,200.00"
-  },
-  {
-    id: "2",
-    expenseItem: "Water",
-    user: "Alvin",
-    cost: "$64.35"
-  },
-  {
-    id: "3",
-    expenseItem: "Internet",
-    user: "Nick",
-    cost: "$75.99"
-  }
-];
-
-const OtherExpenses = [
-  {
-    id: "1",
-    expenseItem: "Costco Run",
-    user: "Alphina",
-    cost: "$105.60"
-  },
-  {
-    id: "2",
-    expenseItem: "Pizza Night",
-    user: "Alvin",
-    cost: "$42.89"
-  },
-  {
-    id: "3",
-    expenseItem: "Concert Tickets",
-    user: "Nick",
-    cost: "$455.03"
-  }
-];
-
-const YourShare = [
-  {
-    id: "1",
-    user: "You owe Nick",
-    cost: "$9.60"
-  },
-  {
-    id: "2",
-    user: "Alvin owes you",
-    cost: "$742.89"
-  }
-];
-
-
-
 // function Item({expenseItem, user, cost}) {
 //   return (
 //     <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
@@ -125,23 +68,27 @@ const YourShare = [
 // }
 
 
+
+
 export default function HomeExpenseScreen (props, {navigation}) {
-  console.log(props)
+
 
     // STATE:
     const [addItemModalVisible, setAddItemModalVisible] = useState(false);
     const [itemName, setItemName] = useState('');
     const [amount, setAmount] = useState('');
     const [holder, setHolder] = useState('');
+    const [paid, setPaid] = useState(false);
 
     const FixedList = props.expenses.map((expense, index) => {
+      console.log(expense.name, expense.expenseHolder, expense.amount)
       return (
-        <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
-          <View style={{ flex: 1, justifyContent: 'center'}}>
-            <Text style={styles.listExpenseItem}>{expense.name}</Text>
-            <Text style={styles.listUser}>{expense.expenseHolder}</Text>
+        <View key={index} style={listStyles.listItemContainer}>
+          <View style={listStyles.nameAndHolderContainer}>
+            <Text style={listStyles.listName}>{expense.name}</Text>
+            <Text style={listStyles.listHolder}>{expense.expenseHolder}</Text>
           </View>
-          <Text style={styles.listCost}>{expense.amount}</Text>
+          <Text style={listStyles.listAmount}>${expense.amount.$numberDecimal}</Text>
         </View>
       )
     })
@@ -186,10 +133,10 @@ export default function HomeExpenseScreen (props, {navigation}) {
             />
             <TextInput
               style={modalStyles.inputField}
-              onChangeText={text => setCost(text)}
-              value={cost}
+              onChangeText={text => setAmount(text)}
+              value={amount}
               autoCapitalize={'words'}
-              placeholder={'Cost'}
+              placeholder={'Amount'}
               keyboardType={'numeric'}
             />
             <TouchableHighlight
@@ -220,21 +167,19 @@ export default function HomeExpenseScreen (props, {navigation}) {
 
       <View style={styles.container, {marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 10}}>
 
-        <Text style={{fontSize: 20, color: "gray", marginTop: 30}}>Fixed Monthly Expenses</Text>
-        {FixedList}
-        {/* <FlatList data={FixedExpenses} renderItem={({item}) => (
-          <Item expenseItem={item.expenseItem} user={item.user} cost={item.cost}/>
-        )}/> */}
+        <Text>NOVEMBER</Text>
 
-        <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Other Household Expenses</Text>
-        {/* <FlatList data={OtherExpenses} renderItem={({item}) => (
-          <Item expenseItem={item.expenseItem} user={item.user} cost={item.cost}/>
-        )}/> */}
+        <Text style={{fontSize: 20, color: "gray", marginTop: 30}}>Fixed Monthly Expenses</Text>
+        <View style={listStyles.listContainer}>
+          {FixedList}
+          </View>
+          <Button title="See all fixed transactions"></Button>
+
+        <Text style={{fontSize: 20, marginTop: 225, color: "gray"}}>Other Household Expenses</Text>
+        <Button title="See all other transactions"></Button>
 
         <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Your Share</Text>
-        {/* <FlatList data={YourShare} renderItem={({item}) => (
-         <ShareTotal item={item}/>
-        )}/> */}
+
 
         </View>
     </View>
@@ -250,22 +195,11 @@ const styles = StyleSheet.create({
   addButton: {
     fontSize: 200
   },
-  listItem: {
-    flexDirection: "row",
-  },
  listExpenseItem: {
     fontSize: 16,
     alignItems: "flex-start"
   },
-  listUser: {
-    fontSize: 12,
-    alignItems: "flex-start",
-    color: colors.secondary
-  },
-  listCost: {
-    fontSize: 17,
-    alignItems: "flex-end"
-  },
+
   dueUser: {
     fontSize: 17,
   },
@@ -273,6 +207,49 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center"
+  }
+});
+
+const listStyles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    // flexWrap: 'wrap',
+    // alignItems: 'center',
+  },
+  listTitles: {
+    borderBottomWidth: 0.5,
+    borderColor: colors.neutralMedium
+  },
+  listItemContainer: {
+    flexDirection: 'row',
+    marginLeft: 5,
+    marginRight: 5,
+    borderBottomWidth: 0.5,
+    borderColor: colors.neutralMedium,
+    height: 40,
+    // justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginTop: 5
+  },
+  nameAndHolderContainer: {
+    flex: 2,
+  },
+  listName: {
+    // marginLeft: 8,
+    fontSize: 16,
+    fontWeight: '500',
+    alignItems: "flex-start",
+    color: colors.neutralDark,
+  },
+  listHolder: {
+    fontSize: 13,
+    alignItems: "flex-start",
+    color: colors.secondary
+  },
+  listAmount: {
+    fontSize: 18,
+    alignItems: "flex-end"
   }
 });
 
