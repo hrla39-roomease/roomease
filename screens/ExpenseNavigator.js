@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, TouchableOpacity, StatusBar, FlatList, TouchableHighlight, Modal, CheckBox} from 'react-native';
+import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, TouchableOpacity, StatusBar, FlatList, TouchableHighlight, Modal} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import colors from '../assets/colors.js';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 
 const Stack = createStackNavigator();
@@ -52,44 +53,98 @@ const OtherExpenses = [
 const YourShare = [
   {
     id: "1",
-    expenseItem: "Costco Run",
-    user: "Alphina",
-    cost: "$105.60"
+    user: "You owe Nick",
+    cost: "$9.60"
   },
   {
     id: "2",
-    expenseItem: "Pizza Night",
-    user: "Alvin",
-    cost: "$42.89"
-  },
-  {
-    id: "3",
-    expenseItem: "Concert Tickets",
-    user: "Nick",
-    cost: "$455.03"
+    user: "Alvin owes you",
+    cost: "$742.89"
   }
 ];
 
-function Item({expenseItem, user, cost}) {
-  return (
-    <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
-      <View style={{ flex: 1, justifyContent: 'center'}}>
-        <Text style={styles.listExpenseItem}>{expenseItem}</Text>
-        <Text style={styles.listUser}>{user}</Text>
-      </View>
-      <Text style={styles.listCost}>{cost}</Text>
-    </View>
-  );
-}
 
 
-export default function HomeExpenseScreen ({navigation}) {
+// function Item({expenseItem, user, cost}) {
+//   return (
+//     <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
+//       <View style={{ flex: 1, justifyContent: 'center'}}>
+//         <Text style={styles.listExpenseItem}>{expenseItem}</Text>
+//         <Text style={styles.listUser}>{user}</Text>
+//       </View>
+//       <Text style={styles.listCost}>{cost}</Text>
+//     </View>
+//   );
+// }
+
+// function Due({user, cost, paid}) {
+//   return (
+//     <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
+//       <View style={{ flex: 1, justifyContent: 'center'}}>
+//         <Text
+//           style={
+//             styles.dueUser,
+//             {textDecorationLine: paid ? "line-through" : "none",
+//               color: paid ? colors.neutralMedium : colors.neutralDark,
+//               paddingLeft: 8
+//             }}>{user}
+//         </Text>
+//       </View>
+//       <Text
+//         style={
+//           styles.dueCost,
+//           {textDecorationLine: paid ? "line-through" : "none",
+//             color: paid ? colors.neutralMedium : "black",
+//             fontSize: 17
+//           }}>{cost}
+//       </Text>
+//     </View>
+//   );
+// }
+
+
+//Your share checkbox styling changes
+// function ShareTotal({item}) {
+//   const [paid, setPaid] = useState(false);
+//   return (
+//     <View style={styles.yourShareBox}>
+
+//       <FontAwesome5 name="circle" size={24}
+//         onPress={() => {
+//           setPaid(!paid)
+//         }}
+//         size={24}
+//         color={paid ? colors.secondary : colors.neutralMedium}
+//         name={paid ? "check-circle" : "circle"}
+//       />
+//       <Due expenseItem={item.expenseItem} user={item.user} cost={item.cost} paid={paid}
+//       />
+
+//     </View>
+//   )
+// }
+
+
+export default function HomeExpenseScreen (props, {navigation}) {
+  console.log(props)
 
     // STATE:
     const [addItemModalVisible, setAddItemModalVisible] = useState(false);
     const [itemName, setItemName] = useState('');
-    const [cost, setCost] = useState('');
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const [amount, setAmount] = useState('');
+    const [holder, setHolder] = useState('');
+
+    const FixedList = props.expenses.map((expense, index) => {
+      return (
+        <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
+          <View style={{ flex: 1, justifyContent: 'center'}}>
+            <Text style={styles.listExpenseItem}>{expense.name}</Text>
+            <Text style={styles.listUser}>{expense.expenseHolder}</Text>
+          </View>
+          <Text style={styles.listCost}>{expense.amount}</Text>
+        </View>
+      )
+    })
 
 
   return (
@@ -103,17 +158,16 @@ export default function HomeExpenseScreen ({navigation}) {
           </View>
           <View style={headerStyles.right}>
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
+              style={{marginRight: 8}}
               onPress={() => {
                 setAddItemModalVisible(!addItemModalVisible)
               }}
             >
-              <Text style={headerStyles.headerText}>+</Text>
+                <FontAwesome5 name="plus" size={18} color="white"/>
             </TouchableHighlight>
           </View>
       </SafeAreaView>
-
-
 
       <Modal
         animationType="slide"
@@ -139,7 +193,7 @@ export default function HomeExpenseScreen ({navigation}) {
               keyboardType={'numeric'}
             />
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
               style={modalStyles.submitButton}
               onPress={() => {
                 setAddItemModalVisible(!addItemModalVisible)
@@ -148,7 +202,7 @@ export default function HomeExpenseScreen ({navigation}) {
               <Text style={modalStyles.textStyle}>Submit</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
+              underlayColor={colors.primaryLighter}
               style={modalStyles.cancelButton}
               onPress={() => {
                 setAddItemModalVisible(!addItemModalVisible)
@@ -167,16 +221,20 @@ export default function HomeExpenseScreen ({navigation}) {
       <View style={styles.container, {marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 10}}>
 
         <Text style={{fontSize: 20, color: "gray", marginTop: 30}}>Fixed Monthly Expenses</Text>
-        <FlatList data={FixedExpenses} renderItem={({item}) => (
+        {FixedList}
+        {/* <FlatList data={FixedExpenses} renderItem={({item}) => (
           <Item expenseItem={item.expenseItem} user={item.user} cost={item.cost}/>
-        )}/>
+        )}/> */}
 
         <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Other Household Expenses</Text>
-        <FlatList data={OtherExpenses} renderItem={({item}) => (
+        {/* <FlatList data={OtherExpenses} renderItem={({item}) => (
           <Item expenseItem={item.expenseItem} user={item.user} cost={item.cost}/>
-        )}/>
+        )}/> */}
 
         <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Your Share</Text>
+        {/* <FlatList data={YourShare} renderItem={({item}) => (
+         <ShareTotal item={item}/>
+        )}/> */}
 
         </View>
     </View>
@@ -207,6 +265,14 @@ const styles = StyleSheet.create({
   listCost: {
     fontSize: 17,
     alignItems: "flex-end"
+  },
+  dueUser: {
+    fontSize: 17,
+  },
+  yourShareBox: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center"
   }
 });
 
@@ -225,7 +291,7 @@ const headerStyles = StyleSheet.create({
     alignItems: 'center',
   },
   right: {
-    paddingBottom: 10,
+    paddingBottom: 12,
     flex: 1,
     alignItems: 'flex-end',
     paddingRight: 12,

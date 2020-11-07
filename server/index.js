@@ -94,10 +94,11 @@ app.post('/api/chore', (req, res) => {
 });
 
 app.post('/api/expense', (req, res) => {
-  const {name, amount, expenseHolder, householdID} = req.body;
+  const {name, amount, expenseType, expenseHolder, householdID} = req.body;
   const newExpense = new db.Expense({
     name: name,
     amount: amount,
+    expenseType: expenseType,
     expenseHolder: expenseHolder
   })
 
