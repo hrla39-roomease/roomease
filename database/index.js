@@ -22,6 +22,7 @@ const choreSchema = new mongoose.Schema({
   name: String,
   date: Date,
   choreHolder: String,
+  isComplete: Boolean,
 });
 
 // subdocument
@@ -42,9 +43,9 @@ const grocerySchema = new mongoose.Schema({
 const householdSchema = new mongoose.Schema({
   name: String,
   householdOwner: String, // reference the user
-  chores: [],
-  expenses: [],
-  groceries: [],
+  chores: [choreSchema],
+  expenses: [expenseSchema],
+  groceries: [grocerySchema],
   users: [],
 });
 
