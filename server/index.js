@@ -76,11 +76,12 @@ app.post('/api/household', (req, res) => {
 });
 
 app.post('/api/chore', (req, res) => {
-  const {name, date, choreHolder, user, householdID} = req.body;
+  const {name, date, choreHolder, householdID} = req.body;
   const newChore = new db.Chore({
     name: name,
     date: date,
     choreHolder: choreHolder,
+    isComplete: false,
   })
 
   db.Household.updateOne(
@@ -94,10 +95,11 @@ app.post('/api/chore', (req, res) => {
 });
 
 app.post('/api/expense', (req, res) => {
-  const {name, amount, expenseHolder, householdID} = req.body;
+  const {name, amount, expenseType, expenseHolder, householdID} = req.body;
   const newExpense = new db.Expense({
     name: name,
     amount: amount,
+    expenseType: expenseType,
     expenseHolder: expenseHolder
   })
 
@@ -186,6 +188,46 @@ app.put('/api/user/:id', (req, res) => {
           }
         )
       }
+    }
+  )
+})
+
+// update chore
+app.put('/api/chore/:choreId', (req, res) => {
+  const {choreId} = req.params;
+  const {chore, householdID } = req.body;
+
+  chore.isComplete = !chore.isComplete;
+
+  db.Household.findOneAndUpdate(
+    {'_id': householdID, 'chores._id': choreId},
+    {
+      '$set': {
+        'chores.$': chore
+      }
+    },
+    (err, result) => {
+      if (err) res.status(400).send(err);
+      else res.status(200).json(result);
+    }
+  )
+})
+
+// delete chore
+app.delete('/api/chore/:choreId', (req, res) => {
+  const {choreId} = req.params;
+  const {householdID} = req.body;
+
+  db.Household.findOneAndUpdate(
+    {'_id': householdID, 'chores._id': choreId},
+    {
+      '$pull': {
+        chores: { _id: choreId }
+      }
+    },
+    (err, result) => {
+      if (err) res.status(400).send(err);
+      else res.status(200).json(result);
     }
   )
 })

@@ -22,12 +22,14 @@ const choreSchema = new mongoose.Schema({
   name: String,
   date: Date,
   choreHolder: String,
+  isComplete: Boolean,
 });
 
 // subdocument
 const expenseSchema = new mongoose.Schema({
   name: String,
   amount: mongoose.Types.Decimal128,
+  expenseType: String,
   expenseHolder: String,
 });
 

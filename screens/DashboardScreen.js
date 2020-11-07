@@ -40,6 +40,7 @@ export default function DashboardScreen(props) {
   const [chores, setChores] = useState([]);
   const [users, setUsers] = useState([]);
 
+
   const fetchData = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -99,7 +100,13 @@ export default function DashboardScreen(props) {
         />
         <Tabs.Screen
           name="Expenses"
-          component={ExpenseNavigator}
+          children={() => <ExpenseNavigator
+            firstName={firstName}
+            householdID={householdID}
+            expenses={expenses}
+            users={users}
+          />
+          }
           options={{
             tabBarLabel: 'Expenses',
             tabBarIcon: ({ color, size }) => (

@@ -9,7 +9,6 @@
     "server": "nodemon server/index.js"
   },
   "dependencies": {
-    "@react-native-community/checkbox": "^0.5.5",
     "@react-native-community/datetimepicker": "3.0.0",
     "@react-native-community/google-signin": "^5.0.0",
     "@react-native-community/masked-view": "0.1.10",
