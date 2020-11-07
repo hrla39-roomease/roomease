@@ -36,7 +36,7 @@ const grocerySchema = new mongoose.Schema({
   name: String,
   quantity: String,
   quantityType: String,
-  isPurched: Boolean,
+  isPurchased: Boolean,
 })
 
 const householdSchema = new mongoose.Schema({
