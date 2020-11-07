@@ -75,25 +75,27 @@ export default function HomeGroceriesScreen({navigation}) {
               autoCapitalize={'words'}
               placeholder={'Quantity Type'}
             />
-            <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
-              style={modalStyles.submitButton}
-              onPress={() => {
-                console.log(itemName, typeof(quantity), quantityType)
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-              <Text style={modalStyles.textStyle}>Submit</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor={colors.primaryLighterBlue}
-              style={modalStyles.cancelButton}
-              onPress={() => {
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-              <Text style={modalStyles.cancelText}>Cancel</Text>
-            </TouchableHighlight>
+            <View style={modalStyles.buttonsContainer}>
+              <TouchableHighlight
+                underlayColor={colors.primaryLighter}
+                style={modalStyles.cancelButton}
+                onPress={() => {
+                  setAddItemModalVisible(!addItemModalVisible)
+                }}
+              >
+                <Text style={modalStyles.cancelText}>Cancel</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={colors.primaryLighter}
+                style={modalStyles.submitButton}
+                onPress={() => {
+                  console.log(itemName, typeof(quantity), quantityType)
+                  setAddItemModalVisible(!addItemModalVisible)
+                }}
+              >
+                <Text style={modalStyles.textStyle}>Submit</Text>
+              </TouchableHighlight>
+            </View>
           </View>
         </View>
       </Modal>
@@ -151,15 +153,14 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    // marginTop: 22,
   },
   modalView: {
     width: '90%',
-    height: '90%',
     backgroundColor: '#fff',
     borderRadius: 25,
     padding: 35,
-    paddingTop: '50%',
+    // paddingTop: '50%',
     alignItems: 'center',
     // justifyContent: 'center',
     shadowColor: '#000',
@@ -171,13 +172,20 @@ const modalStyles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
+  buttonsContainer: {
+    width: '100%',
+    paddingTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   submitButton: {
     backgroundColor: colors.primary,
     borderRadius: 20,
     padding: 10,
     width: '40%',
     elevation: 2,
-    marginBottom: 8,
+    marginLeft: 4,
+    flex: 1,
   },
   cancelButton: {
     backgroundColor: '#fff',
@@ -186,7 +194,9 @@ const modalStyles = StyleSheet.create({
     borderColor: colors.primary,
     padding: 10,
     width: '40%',
-    elevation: 2
+    elevation: 2,
+    marginRight: 4,
+    flex: 1
   },
   textStyle: {
     fontSize: 16,
@@ -202,7 +212,7 @@ const modalStyles = StyleSheet.create({
   },
   modalText: {
     fontSize: 24,
-    marginTop: 70,
+    // marginTop: 70,
     marginBottom: 26,
     textAlign: 'center'
   },
