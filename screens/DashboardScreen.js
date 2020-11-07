@@ -1,26 +1,29 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  SafeAreaView,
+  TouchableOpacity,
+  TouchableHighlight,
+  Image,
+  Modal,
+} from 'react-native';
 import firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import axios from 'axios';
+
+import Homepage from './Homepage.js'
 import ChoresNavigator from './ChoresNavigator.js';
 import GroceriesNavigator from './GroceriesNavigator.js';
 import ExpenseNavigator from './ExpenseNavigator.js';
 import colors from '../assets/colors.js';
-import axios from 'axios';
 
 const Tabs = createBottomTabNavigator();
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={styles.text}>This is the homepage</Text>
-      <Button title="Sign Out" onPress={() => firebase.auth().signOut()} />
-    </View>
-  )
-}
 
 export default function DashboardScreen(props) {
   // hooks
@@ -29,7 +32,7 @@ export default function DashboardScreen(props) {
   const [firebaseAuthID, setfirebaseAuthID] = useState('');
   const [householdID, sethouseholdID] = useState('');
   const [isHouseholdOwner, setIsHouseholdOwner] = useState('');
-  const [pictureURL, setpictureURL] = useState('');
+  const [pictureURL, setpictureURL] = useState('https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg');
 
   const [householdName, setHouseholdName] = useState('');
   const [groceries, setGroceries] = useState([]);
@@ -79,8 +82,15 @@ export default function DashboardScreen(props) {
         }}
       >
         <Tabs.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Homepage"
+          children={() => <Homepage
+            pictureURL={pictureURL}
+            firstName={firstName}
+            lastName={lastName}
+            householdName={householdName}
+            householdID={householdID}
+          />
+          }
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
@@ -140,14 +150,9 @@ export default function DashboardScreen(props) {
   )
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  text: {
-    fontSize: 25,
-  }
 });
