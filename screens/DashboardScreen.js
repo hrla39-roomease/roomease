@@ -39,34 +39,34 @@ export default function DashboardScreen(props) {
   const [chores, setChores] = useState([]);
   const [users, setUsers] = useState([]);
 
+  const fetchData = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        axios.get(`http://localhost:3009/signin/${user.uid}`)
+          .then(result => {
+            setFirstName(result.data.firstName);
+            setLastName(result.data.lastName);
+            sethouseholdID(result.data.householdID);
+            setIsHouseholdOwner(result.data.isHouseholdOwner);
+            setpictureURL(result.data.pictureURL);
+            setfirebaseAuthID(user.uid);
+
+            axios.get(`http://localhost:3009/api/household/${result.data.householdID}`)
+              .then(results => {
+                setHouseholdName(results.data.name);
+                setGroceries(results.data.groceries);
+                setExpenses(results.data.expenses);
+                setChores(results.data.chores);
+                setUsers(results.data.users);
+              })
+              .catch(err => console.error(err));
+          })
+          .catch(err => console.error(err));
+      }
+    })
+  }
+
   useEffect(() => {
-    const fetchData = () => {
-
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          axios.get(`http://localhost:3009/signin/${user.uid}`)
-            .then(result => {
-              setFirstName(result.data.firstName);
-              setLastName(result.data.lastName);
-              sethouseholdID(result.data.householdID);
-              setIsHouseholdOwner(result.data.isHouseholdOwner);
-              setpictureURL(result.data.pictureURL);
-              setfirebaseAuthID(user.uid);
-
-              axios.get(`http://localhost:3009/api/household/${result.data.householdID}`)
-                .then(results => {
-                  setHouseholdName(results.data.name);
-                  setGroceries(results.data.groceries);
-                  setExpenses(results.data.expenses);
-                  setChores(results.data.chores);
-                  setUsers(results.data.users);
-                })
-                .catch(err => console.error(err));
-            })
-            .catch(err => console.error(err));
-        }
-      })
-    }
     fetchData();
   }, []);
 
