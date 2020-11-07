@@ -119,7 +119,7 @@ app.post('/api/grocery', (req, res) => {
     name: name,
     quantity: quantity,
     quantityType: quantityType,
-    isPurched: false,
+    isPurchased: false,
   });
 
   db.Household.updateOne(
@@ -145,6 +145,25 @@ app.delete('/api/grocery/:id', (req, res) => {
       }
     }
   )
+})
+
+// PUT mark grocery item as bought
+app.put('/api/grocery/:id', (req, res) => {
+  const itemID = req.params.id;
+  db.Household.updateOne(
+    { "groceries._id": itemID },
+    {
+      "$set": {
+        "groceries.$.isPurchased": true
+      }
+    },
+    (err, result) => {
+      if (err) res.status(400).send(err);
+      else {
+        res.status(200).json(result);
+      }
+    }
+  );
 })
 
 // PUT
