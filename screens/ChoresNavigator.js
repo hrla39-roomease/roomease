@@ -16,9 +16,6 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome5 } from '@expo/vector-icons';
-import dayjs from 'dayjs';
-import weekday from 'dayjs/plugin/weekday';
-import isToday from 'dayjs/plugin/isToday';
 import axios from 'axios';
 
 import colors from '../assets/colors';
