@@ -33,9 +33,18 @@ export default function HomeGroceriesScreen(props) {
   const GroceryList = props.groceries.map((grocery, index) => {
     return (
       <View style={listStyles.listItemContainer} key={index}>
-        <View style={listStyles.itemAndQuantityContainer}>
-
-          <FontAwesome5 name="circle" size={22} color={colors.neutralMedium} />
+        <View style={listStyles.itemAndQuantityContainer}
+          onPress={() => {
+            axios.put(`http://localhost:3009/api/grocery/${grocery._id}`)
+              .then((result) => props.fetchData())
+              .catch((err) => console.error(err))
+          }}
+        >
+          <FontAwesome5
+            name={ grocery.isPurchased ? "check-circle" : "circle"}
+            size={22}
+            color={colors.neutralMedium}
+          />
           <Text style={listStyles.item}>{grocery.name}</Text>
           <Text style={listStyles.quantity}>({grocery.quantity} {grocery.quantityType})</Text>
         </View>
