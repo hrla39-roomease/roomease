@@ -154,5 +154,45 @@ app.put('/api/user/:id', (req, res) => {
   )
 })
 
+// update chore
+app.put('/api/chore/:choreId', (req, res) => {
+  const {choreId} = req.params;
+  const {chore, householdID } = req.body;
+
+  chore.isComplete = !chore.isComplete;
+
+  db.Household.findOneAndUpdate(
+    {'_id': householdID, 'chores._id': choreId},
+    {
+      '$set': {
+        'chores.$': chore
+      }
+    },
+    (err, result) => {
+      if (err) res.status(400).send(err);
+      else res.status(200).json(result);
+    }
+  )
+})
+
+// delete chore
+app.delete('/api/chore/:choreId', (req, res) => {
+  const {choreId} = req.params;
+  const {householdID} = req.body;
+
+  db.Household.findOneAndUpdate(
+    {'_id': householdID, 'chores._id': choreId},
+    {
+      '$pull': {
+        chores: { _id: choreId }
+      }
+    },
+    (err, result) => {
+      if (err) res.status(400).send(err);
+      else res.status(200).json(result);
+    }
+  )
+})
+
 const PORT = 3009;
 app.listen(PORT, () => console.log(`LISTENING ON PORT ${PORT}`));
