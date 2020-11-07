@@ -13,17 +13,35 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import colors from '../assets/colors';
 
 export default function HomeGroceriesScreen(props) {
+  // Available Props:
+  //   groceries (array)
+  //   householdID
 
   // STATE:
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
   const [itemName, setItemName] = useState('');
   const [quantity, setQuantity] = useState('');
   const [quantityType, setQuantityType] = useState('');
-  const [householdName, setHouseholdName] = useState('');
+
+  const GroceryList = props.groceries.map((grocery, index) => {
+    return (
+      <View style={listStyles.listItemContainer} key={index}>
+        <View style={listStyles.itemAndQuantityContainer}>
+          <FontAwesome5 name="circle" size={22} color={colors.neutralMedium} />
+          <Text style={listStyles.item}>{grocery.name}</Text>
+          <Text style={listStyles.quantity}>({grocery.quantity} {grocery.quantityType})</Text>
+        </View>
+        <View style={listStyles.trashContainer}>
+          <FontAwesome5 name="trash-alt" size={22} color={colors.neutralMedium} />
+        </View>
+      </View>
+    )
+  })
 
   return (
     <View style={styles.container}>
@@ -37,14 +55,22 @@ export default function HomeGroceriesScreen(props) {
         <View style={headerStyles.right}>
           <TouchableHighlight
             underlayColor={colors.primaryLighter}
+            style={{ marginRight: 8 }}
             onPress={() => {
               setAddItemModalVisible(!addItemModalVisible)
             }}
           >
-            <Text style={headerStyles.headerText}>Add Item</Text>
+            <FontAwesome5 name="plus" size={18} color="white" />
           </TouchableHighlight>
         </View>
       </SafeAreaView>
+
+      <View style={listStyles.listContainer}>
+
+        {GroceryList}
+
+      </View>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -137,7 +163,7 @@ const headerStyles = StyleSheet.create({
     alignItems: 'center',
   },
   right: {
-    paddingBottom: 10,
+    paddingBottom: 12,
     flex: 1,
     alignItems: 'flex-end',
     paddingRight: 12,
@@ -157,6 +183,44 @@ const headerStyles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'normal',
+  },
+})
+
+const listStyles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  listItemContainer: {
+    flexDirection: 'row',
+    marginLeft: 16,
+    marginRight: 16,
+    borderBottomWidth: 0.5,
+    borderColor: colors.neutralMedium,
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemAndQuantityContainer: {
+    flexDirection: 'row',
+    flex: 2,
+  },
+  trashContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  item: {
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.neutralDark,
+  },
+  quantity: {
+    fontSize: 16,
+    color: colors.primaryLight,
+    marginLeft: 4,
   },
 })
 
