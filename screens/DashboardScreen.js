@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -15,11 +15,34 @@ import axios from 'axios';
 
 const Tabs = createBottomTabNavigator();
 
-function HomeScreen() {
+
+function HomeScreen(props) {
+  // onPress={() => firebase.auth().signOut()}
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={styles.text}>This is the homepage</Text>
-      <Button title="Sign Out" onPress={() => firebase.auth().signOut()} />
+    <View style={styles.container}>
+      <SafeAreaView style={headerStyles.header}>
+        <View style={headerStyles.left}>
+          <Text style={headerStyles.headerText}></Text>
+        </View>
+        <View style={headerStyles.center}>
+          <Text style={headerStyles.headerTitle}>Home</Text>
+        </View>
+        <View style={headerStyles.right}>
+          <TouchableOpacity
+            underlayColor={colors.primaryLighter}
+            style={{ marginRight: 8 }}
+            onPress={() => {
+              // setAddItemModalVisible(!addItemModalVisible)
+            }}
+          >
+            <Image
+              source={{ uri: props.pictureURL }}
+              style={headerStyles.profilePhoto}
+            />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </View>
   )
 }
@@ -31,7 +54,7 @@ export default function DashboardScreen(props) {
   const [firebaseAuthID, setfirebaseAuthID] = useState('');
   const [householdID, sethouseholdID] = useState('');
   const [isHouseholdOwner, setIsHouseholdOwner] = useState('');
-  const [pictureURL, setpictureURL] = useState('');
+  const [pictureURL, setpictureURL] = useState('https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg');
 
   const [householdName, setHouseholdName] = useState('');
   const [groceries, setGroceries] = useState([]);
@@ -81,7 +104,10 @@ export default function DashboardScreen(props) {
       >
         <Tabs.Screen
           name="Home"
-          component={HomeScreen}
+          children={() => <HomeScreen
+            pictureURL={pictureURL}
+          />
+          }
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
@@ -135,14 +161,52 @@ export default function DashboardScreen(props) {
   )
 }
 
+const headerStyles = StyleSheet.create({
+  header: {
+    backgroundColor: colors.primaryDark,
+    width: '100%',
+    height: '11.25%',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  center: {
+    paddingBottom: 10,
+    flex: 2,
+    alignItems: 'center',
+  },
+  right: {
+    paddingBottom: 10,
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingRight: 12,
+  },
+  profilePhoto: {
+    width: 35,
+    height: 35,
+    borderRadius: 25,
+  },
+  left: {
+    paddingBottom: 10,
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: 12,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: 'white',
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'normal',
+  },
+})
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  text: {
-    fontSize: 25,
-  }
 });
