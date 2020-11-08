@@ -192,7 +192,7 @@ app.put('/api/user/:id', (req, res) => {
   )
 })
 
-// update chore
+// toggle chore completion
 app.put('/api/chore/:choreId', (req, res) => {
   const {choreId} = req.params;
   const {chore, householdID } = req.body;
@@ -217,6 +217,9 @@ app.put('/api/chore/:choreId', (req, res) => {
 app.delete('/api/chore/:choreId', (req, res) => {
   const {choreId} = req.params;
   const {householdID} = req.body;
+
+  console.log(`choreId: ${choreId}`);
+  console.log(`householdID: ${householdID}`);
 
   db.Household.findOneAndUpdate(
     {'_id': householdID, 'chores._id': choreId},
