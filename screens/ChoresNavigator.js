@@ -45,7 +45,6 @@ export default function ChoresNavigator(props) {
     }
 
     return week;
-
   };
 
   const [week, setWeek] = useState(() => getWeek());
