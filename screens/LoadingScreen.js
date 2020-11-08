@@ -4,8 +4,6 @@ import firebase from 'firebase';
 import axios from 'axios';
 import * as Google from "expo-google-app-auth";
 
-
-
 export default class LoadingScreen extends React.Component {
 
   componentDidMount(){
@@ -27,18 +25,10 @@ export default class LoadingScreen extends React.Component {
                 id: result.data._id,
               });
             } else {
-              this.props.navigation.navigate('DashboardScreen', {
-                // firstName: result.data.firstName,
-                // lastName: result.data.lastName,
-                // firebaseAuthID: result.data.firebaseAuthID,
-                // householdID: result.data.householdID,
-                // isHouseholdOwner: result.data.isHouseholdOwner,
-                // pictureURL: result.data.pictureURL,
-              });
+              this.props.navigation.navigate('DashboardScreen');
             }
           })
           .catch((err) => console.error(err));
-        this.props.navigation.navigate('DashboardScreen')
       } else {
         this.props.navigation.navigate('LoginScreen')
       }
