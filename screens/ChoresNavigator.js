@@ -321,6 +321,12 @@ const mainStyles = StyleSheet.create({
     fontWeight: '500',
     color: colors.neutralDark,
   },
+  isComplete: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: colors.neutralMedium,
+    textDecorationLine: "line-through",
+  },
   icon: {
     flex: 1,
     textAlign: 'center',
@@ -332,7 +338,6 @@ const mainStyles = StyleSheet.create({
   userComplete: {
     fontSize: 14,
     color: colors.neutralMedium,
-    marginLeft: 8,
     textDecorationLine: "line-through",
   },
   checkIcon: {
@@ -340,13 +345,6 @@ const mainStyles = StyleSheet.create({
   },
   trashIcon: {
     fontSize: 24,
-  },
-  isComplete: {
-    marginLeft: 8,
-    fontSize: 18,
-    fontWeight: '500',
-    color: colors.neutralMedium,
-    textDecorationLine: "line-through",
   },
   trashContainer: {
     flexDirection: 'row',
