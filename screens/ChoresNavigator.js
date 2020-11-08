@@ -70,19 +70,40 @@ export default function ChoresNavigator(props) {
         {choresOfDay.map((chore, index) => (
           <View style={mainStyles.choreContainer} key={index}>
             <View style={{flexDirection: 'row', width: '100%'}}>
-              <Text style={mainStyles.choreName}>{chore.name}</Text>
               <Text
-                style={mainStyles.choreDelete}
+                style={chore.isComplete ? [mainStyles.choreName, mainStyles.isComplete] : mainStyles.choreName}
+
+              >
+                {chore.name}
+              </Text>
+              <Text
+                style={mainStyles.icon}
+              >
+              <FontAwesome5
+                name={chore.isComplete ? "check-circle" : "circle"}
+                size={24}
+                color={chore.isComplete ? colors.neutralMedium : colors.primary}
+                onPress={() => toggleComplete(chore)}
+                style={mainStyles.checkIcon}
+              />
+              </Text>
+              <Text
+                style={mainStyles.icon}
                 onPress={() => deleteChore(chore)}
               >
                 <FontAwesome5
                   name="trash-alt"
                   size={20}
                   color={colors.neutralMedium}
+                  style={mainStyles.trashIcon}
                 />
               </Text>
             </View>
-            <Text style={mainStyles.userChore}>{chore.choreHolder}</Text>
+            <Text
+              style={chore.isComplete ? [mainStyles.userChore, mainStyles.isComplete] : mainStyles.userChore}
+            >
+              {chore.choreHolder}
+            </Text>
           </View>
         ))}
       </View>
@@ -247,15 +268,14 @@ export default function ChoresNavigator(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
   },
 });
 
 const mainStyles = StyleSheet.create({
   dateHeader: {
-    // flex: 0,
     width: '100%',
     flexDirection: 'column',
+    borderBottomColor: colors.neutralMedium,
   },
   dateText: {
     fontSize: 32,
@@ -264,24 +284,35 @@ const mainStyles = StyleSheet.create({
     textAlign: 'center',
   },
   choreContainer: {
-    padding: 5,
+    paddingTop: 8,
+    paddingBottom: 8,
+    marginLeft: 8,
+    marginRight: 8,
+    borderBottomWidth: 0.5,
+    borderColor: colors.neutralMedium,
   },
   choreName: {
     fontSize: 18,
     alignItems: 'flex-start',
-    width: '95%',
+    width: '84%',
+  },
+  icon: {
+    flex: 1,
+    textAlign: 'center',
+
   },
   userChore: {
     fontSize: 14,
-    alignSelf: 'flex-start',
   },
-  choreDelete: {
-    alignSelf: 'flex-end',
-    width: '5%',
-    fontSize: 20
+  checkIcon: {
+    fontSize: 24,
+  },
+  trashIcon: {
+    fontSize: 24,
   },
   isComplete: {
     textDecorationLine: 'line-through',
+    color: colors.neutralMedium,
   }
 });
 
