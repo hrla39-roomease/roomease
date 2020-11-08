@@ -289,10 +289,10 @@ const mainStyles = StyleSheet.create({
   dateHeader: {
     width: '100%',
     flexDirection: 'column',
-    borderBottomColor: colors.neutralMedium,
   },
   dateText: {
-    fontSize: 32,
+    fontSize: 22,
+    fontWeight: '500',
     backgroundColor: colors.primary,
     color: '#fff',
     textAlign: 'center',
