@@ -122,6 +122,7 @@ export default function DashboardScreen(props) {
             householdID={householdID}
             chores={chores}
             users={users}
+            fetchData={fetchData}
           />
           }
           options={{

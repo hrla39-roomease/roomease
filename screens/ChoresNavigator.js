@@ -7,6 +7,7 @@ import {
   Button,
   SafeAreaView,
   TouchableHighlight,
+  TouchableOpacity,
   Modal,
   Alert,
   TextInput,
@@ -26,11 +27,9 @@ export default function ChoresNavigator(props) {
   const [show, setShow] = useState(true);
   const [newChore, setNewChore] = useState('');
   const [assignedUser, setAssignedUser] = useState('Pick a person');
-  const [chores, setChores] = useState(props.chores);
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
 
-  const showDaysAndChores = () => {
-    console.log('chorelist', chores)
+  const getWeek = () => {
     const dayInWordFormat = (day) => new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(day);
     const month = (month) => new Intl.DateTimeFormat('en-US', { month: 'long' }).format(month);
     let day = new Date(); //starts by today
@@ -45,39 +44,75 @@ export default function ChoresNavigator(props) {
       day.setDate(day.getDate() + 1);
     }
 
-    return week.map((day, index) => {
-      let choresOfDay = chores.filter(chore => {
-        let choreDay = new Date(chore.date);
-        let choreWordDay = dayInWordFormat(choreDay);
-        let choreMonth = dayInWordFormat(choreDay);
-        if (choreWordDay === day.wordDay) {
-          return true;
-        }
-      })
-      return (
-        <View key={index}>
-          <View style={mainStyles.dateHeader}>
-            <Text style={mainStyles.dateText}>{day.wordDay}, {day.month} {day.day}</Text>
-          </View>
-
-          {choresOfDay.map((chore, index) => (
-            <View style={mainStyles.choreContainer} key={index}>
-              <View style={{flexDirection: 'row', width: '100%'}}>
-                <Text style={mainStyles.choreName}>{chore.name}</Text>
-                <Text style={mainStyles.choreDelete}>X</Text>
-              </View>
-              <Text style={mainStyles.userChore}>{chore.choreHolder}</Text>
-            </View>
-          ))}
-        </View>
-      )
-    })
+    return week;
 
   };
 
+  const [week, setWeek] = useState(() => getWeek());
+
+  const showChores = week.map((day, index) => {
+    const dayInWordFormat = (day) => new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(day);
+    const month = (month) => new Intl.DateTimeFormat('en-US', { month: 'long' }).format(month);
+    let choresOfDay = props.chores.filter(chore => {
+      let choreDay = new Date(chore.date);
+      let choreWordDay = dayInWordFormat(choreDay);
+      let choreMonth = dayInWordFormat(choreDay);
+      if (choreWordDay === day.wordDay) {
+        return true;
+      }
+    })
+    return (
+      <View key={index}>
+        <View style={mainStyles.dateHeader}>
+          <Text style={mainStyles.dateText}>{day.wordDay}, {day.month} {day.day}</Text>
+        </View>
+
+        {choresOfDay.map((chore, index) => (
+          <View style={mainStyles.choreContainer} key={index}>
+            <View style={{flexDirection: 'row', width: '100%'}}>
+              <Text
+                style={chore.isComplete ? [mainStyles.choreName, mainStyles.isComplete] : mainStyles.choreName}
+
+              >
+                {chore.name}
+              </Text>
+              <Text
+                style={mainStyles.icon}
+              >
+              <FontAwesome5
+                name={chore.isComplete ? "check-circle" : "circle"}
+                size={24}
+                color={chore.isComplete ? colors.neutralMedium : colors.primary}
+                onPress={() => toggleComplete(chore)}
+                style={mainStyles.checkIcon}
+              />
+              </Text>
+              <Text
+                style={mainStyles.icon}
+                onPress={() => deleteChore(chore)}
+              >
+                <FontAwesome5
+                  name="trash-alt"
+                  size={20}
+                  color={colors.neutralMedium}
+                  style={mainStyles.trashIcon}
+                />
+              </Text>
+            </View>
+            <Text
+              style={chore.isComplete ? [mainStyles.userChore, mainStyles.isComplete] : mainStyles.userChore}
+            >
+              {chore.choreHolder}
+            </Text>
+          </View>
+        ))}
+      </View>
+    )
+  });
+
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    console.log(`ios Date: ${currentDate}`);
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
@@ -118,15 +153,29 @@ export default function ChoresNavigator(props) {
       choreHolder: assignedUser,
       householdID: props.householdID
     })
-      .then(result => console.log('success'))
+      .then(result => props.fetchData())
       .catch(err => console.error(err));
-    // setChores([...chores, {chore: newChore, due: date, assignedTo: assignedUser}])
+
     setNewChore('');
     setAssignedUser('Pick a person');
   }
 
   // TODO: update chore to complete/incomplete
+  const toggleComplete = (chore) => {
+    axios.put(`http://localhost:3009/api/chore/${chore._id}`,
+    {
+      chore: chore,
+      householdID: props.householdID
+    })
+      .then(result => props.fetchData())
+      .catch(err => console.error(err));
+  }
   // TODO: delete chore
+  const deleteChore = (chore) => {
+    axios.delete(`http://localhost:3009/api/chore/${chore._id}`, { data: { householdID: props.householdID } })
+      .then(result => props.fetchData())
+      .catch(err => console.error(err));
+  }
   return (
     <View style={styles.container}>
       {/* HEADER */}
@@ -138,20 +187,21 @@ export default function ChoresNavigator(props) {
           <Text style={headerStyles.headerTitle}>Chores</Text>
         </View>
         <View style={headerStyles.right}>
-          <TouchableHighlight
+          <TouchableOpacity
             underlayColor={colors.primaryLighterBlue}
+            style={{ marginRight: 8}}
             onPress={() => {
               setAddItemModalVisible(!addItemModalVisible)
             }}
           >
-            <Text style={headerStyles.headerText}>Add Chore</Text>
-          </TouchableHighlight>
+            <FontAwesome5 name="plus" size={18} color="white" />
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
       {/* MAIN SCREEN CONTENT */}
       <ScrollView>
         <View>
-          {showDaysAndChores()}
+          {showChores}
         </View>
 
         {/* MODAL */}
@@ -218,15 +268,14 @@ export default function ChoresNavigator(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
   },
 });
 
 const mainStyles = StyleSheet.create({
   dateHeader: {
-    // flex: 0,
     width: '100%',
     flexDirection: 'column',
+    borderBottomColor: colors.neutralMedium,
   },
   dateText: {
     fontSize: 32,
@@ -235,24 +284,35 @@ const mainStyles = StyleSheet.create({
     textAlign: 'center',
   },
   choreContainer: {
-    padding: 5,
+    paddingTop: 8,
+    paddingBottom: 8,
+    marginLeft: 8,
+    marginRight: 8,
+    borderBottomWidth: 0.5,
+    borderColor: colors.neutralMedium,
   },
   choreName: {
     fontSize: 18,
     alignItems: 'flex-start',
-    width: '95%',
+    width: '84%',
+  },
+  icon: {
+    flex: 1,
+    textAlign: 'center',
+
   },
   userChore: {
     fontSize: 14,
-    alignSelf: 'flex-start',
   },
-  choreDelete: {
-    alignSelf: 'flex-end',
-    width: '5%',
-    fontSize: 20
+  checkIcon: {
+    fontSize: 24,
+  },
+  trashIcon: {
+    fontSize: 24,
   },
   isComplete: {
     textDecorationLine: 'line-through',
+    color: colors.neutralMedium,
   }
 });
 
@@ -271,7 +331,7 @@ const headerStyles = StyleSheet.create({
     alignItems: 'center',
   },
   right: {
-    paddingBottom: 10,
+    paddingBottom: 12,
     flex: 1,
     alignItems: 'flex-end',
     paddingRight: 12,
