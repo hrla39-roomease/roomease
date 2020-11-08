@@ -90,7 +90,7 @@ export default function HomeScreen(props) {
                   }}
                 >
                   <View style={modalStyles.buttonInner}>
-                    <FontAwesome5 name="cog" size={16} color={colors.neutralDark} />
+                    <FontAwesome5 name="cog" size={16} color='#444' />
                     <Text style={modalStyles.manageAccountText}>
                       Manage Your Account
                     </Text>
@@ -106,7 +106,7 @@ export default function HomeScreen(props) {
                 <Text style={{
                   fontSize: 16,
                   fontWeight: '600',
-                  color: colors.neutralDark,
+                  color: colors.primary,
                   marginLeft: 5,
                 }}>
                   {props.householdName}
@@ -120,7 +120,7 @@ export default function HomeScreen(props) {
                 }}>
                   Household Invite Code:
                 </Text>
-                <Text style={modalStyles.householdName}>
+                <Text style={modalStyles.householdID}>
                   {props.householdID}
                 </Text>
               </View>
@@ -133,7 +133,7 @@ export default function HomeScreen(props) {
                   }}
                 >
                   <View style={modalStyles.buttonInner}>
-                    <FontAwesome5 name="home" size={16} color={colors.neutralDark} />
+                    <FontAwesome5 name="home" size={16} color='#444' />
                     <Text style={modalStyles.manageAccountText}>
                       Manage Your Household
                     </Text>
@@ -151,7 +151,7 @@ export default function HomeScreen(props) {
                   }}
                 >
                   <View style={modalStyles.buttonInner}>
-                    <FontAwesome5 name="arrow-alt-circle-left" size={16} color={colors.neutralDark} />
+                    <FontAwesome5 name="arrow-alt-circle-left" size={16} color='#444' />
                     <Text style={modalStyles.manageAccountText}>
                       Logout
                     </Text>
@@ -288,10 +288,10 @@ const modalStyles = StyleSheet.create({
     fontSize: 16,
     color: colors.neutralDark,
   },
-  householdName: {
+  householdID: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutralDark,
+    color: colors.primary,
   },
   logoutContainer: {
     margin: 20,
