@@ -26,7 +26,7 @@ export default function ChoresNavigator(props) {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(true);
   const [newChore, setNewChore] = useState('');
-  const [assignedUser, setAssignedUser] = useState('Pick a person');
+  const [assignedUser, setAssignedUser] = useState('');
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
 
   const getWeek = () => {
@@ -204,7 +204,7 @@ export default function ChoresNavigator(props) {
           {showChores}
         </View>
 
-        {/* MODAL */}
+        {/* --- MODAL --- */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -212,7 +212,7 @@ export default function ChoresNavigator(props) {
         >
           <View style={modalStyles.centeredView}>
             <View style={modalStyles.modalView}>
-              <Text style={modalStyles.modalText}>Add a chore to the{'\n'}chores list:</Text>
+              <Text style={modalStyles.modalText}>Add a chore to{'\n'}the chores list:</Text>
               <TextInput
                 style={modalStyles.inputField}
                 onChangeText={newChore => setNewChore(newChore)}
@@ -220,9 +220,17 @@ export default function ChoresNavigator(props) {
                 autoCapitalize={'words'}
                 placeholder={'Add chore here'}
               />
-              <View>
-                <Button onPress={onPress} title="Assign Chore" />
-                <Text style={modalStyles.modalText}>Chore assigned to: {assignedUser}</Text>
+              <View style={modalStyles.assignChoreContainer}>
+                <Text style={modalStyles.choreAssignedToText}>Chore assigned to: </Text>
+                {assignedUser === '' ?
+                  <Button onPress={onPress} title="Assign Chore" color={colors.primary} fontSize={20}/> :
+                  <TouchableOpacity
+                    style={modalStyles.assignedUserButton}
+                    onPress={onPress}
+                  >
+                    <Text style={modalStyles.assignedUserText}>{assignedUser}</Text>
+                  </TouchableOpacity>
+                }
               </View>
 
               {/* --- show date picker --- */}
@@ -365,25 +373,54 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, .6)'
+    marginTop: 22,
   },
   modalView: {
     width: '90%',
+    // height: '60%',
     backgroundColor: '#fff',
     borderRadius: 25,
-    paddingLeft: 35,
-    paddingRight: 35,
-    paddingTop: 40,
-    paddingBottom: 40,
+    padding: 35,
     alignItems: 'center',
-    shadowColor: '#fff',
+    // justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: {
-      width: 1,
+      width: 0,
       height: 2
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.5,
-    elevation: 5
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 24,
+    marginBottom: 14,
+    textAlign: 'center'
+  },
+  inputField: {
+    fontSize: 20,
+    height: 45,
+    borderColor: colors.neutralLight,
+    borderRadius: 25,
+    borderWidth: 1,
+    width: '100%',
+    marginBottom: 0,
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  assignChoreContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  choreAssignedToText: {
+    fontSize: 20,
+  },
+  assignedUserText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: colors.primary,
   },
   buttonsContainer: {
     width: '100%',
@@ -422,25 +459,13 @@ const modalStyles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
-  modalText: {
-    fontSize: 24,
-    marginBottom: 26,
-    textAlign: 'center'
-  },
-  inputField: {
-    fontSize: 20,
-    height: 45,
-    borderColor: colors.neutralLight,
-    borderRadius: 25,
-    borderWidth: 1,
-    width: '100%',
-    marginBottom: 24,
-    marginTop: 10,
-    textAlign: 'center'
-  },
   datePicker: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'white'
-  }
+    height: 44,
+  },
+  datePickerContainer: {
+    height: 230,
+    width: '100%',
+  },
 });
