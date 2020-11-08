@@ -213,10 +213,6 @@ export default function HouseholdConnect(props) {
   )
 }
 
-// Routes needed:
-  // Get household by _id
-  // Put household to user
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
