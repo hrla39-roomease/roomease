@@ -1,97 +1,192 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, TouchableOpacity, StatusBar, FlatList, TouchableHighlight, Modal} from 'react-native';
+import { StyleSheet, Text, View, Image, Button, SafeAreaView, Alert, TextInput, TouchableOpacity, StatusBar, FlatList, TouchableHighlight, Modal, ScollView, ActionSheetIOS} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import colors from '../assets/colors.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-
+import axios from 'axios';
 
 const Stack = createStackNavigator();
 
-// function Item({expenseItem, user, cost}) {
-//   return (
-//     <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
-//       <View style={{ flex: 1, justifyContent: 'center'}}>
-//         <Text style={styles.listExpenseItem}>{expenseItem}</Text>
-//         <Text style={styles.listUser}>{user}</Text>
-//       </View>
-//       <Text style={styles.listCost}>{cost}</Text>
-//     </View>
-//   );
-// }
-
-// function Due({user, cost, paid}) {
-//   return (
-//     <View style={{flex: 1, flexDirection: "row", marginTop: 10, marginBottom: 10}}>
-//       <View style={{ flex: 1, justifyContent: 'center'}}>
-//         <Text
-//           style={
-//             styles.dueUser,
-//             {textDecorationLine: paid ? "line-through" : "none",
-//               color: paid ? colors.neutralMedium : colors.neutralDark,
-//               paddingLeft: 8
-//             }}>{user}
-//         </Text>
-//       </View>
-//       <Text
-//         style={
-//           styles.dueCost,
-//           {textDecorationLine: paid ? "line-through" : "none",
-//             color: paid ? colors.neutralMedium : "black",
-//             fontSize: 17
-//           }}>{cost}
-//       </Text>
-//     </View>
-//   );
-// }
-
-
-//Your share checkbox styling changes
-// function ShareTotal({item}) {
-//   const [paid, setPaid] = useState(false);
-//   return (
-//     <View style={styles.yourShareBox}>
-
-//       <FontAwesome5 name="circle" size={24}
-//         onPress={() => {
-//           setPaid(!paid)
-//         }}
-//         size={24}
-//         color={paid ? colors.secondary : colors.neutralMedium}
-//         name={paid ? "check-circle" : "circle"}
-//       />
-//       <Due expenseItem={item.expenseItem} user={item.user} cost={item.cost} paid={paid}
-//       />
-
-//     </View>
-//   )
-// }
-
-
-
-
 export default function HomeExpenseScreen (props, {navigation}) {
+  // STATE:
+  const [addItemModalVisible, setAddItemModalVisible] = useState(false);
+  const [itemName, setItemName] = useState('');
+  const [amount, setAmount] = useState('');
+  const [holder, setHolder] = useState('');
+  const [paid, setPaid] = useState(false);
+  const [expenseType, setExpenseType] = useState('');
+  const [newExpense, setNewExpense] = useState(props.expenses);
+  const [expenses, setExpenses] = useState([]);
 
-
-    // STATE:
-    const [addItemModalVisible, setAddItemModalVisible] = useState(false);
-    const [itemName, setItemName] = useState('');
-    const [amount, setAmount] = useState('');
-    const [holder, setHolder] = useState('');
-    const [paid, setPaid] = useState(false);
-
-    const FixedList = props.expenses.map((expense, index) => {
-      console.log(expense.name, expense.expenseHolder, expense.amount)
-      return (
-        <View key={index} style={listStyles.listItemContainer}>
-          <View style={listStyles.nameAndHolderContainer}>
-            <Text style={listStyles.listName}>{expense.name}</Text>
-            <Text style={listStyles.listHolder}>{expense.expenseHolder}</Text>
-          </View>
-          <Text style={listStyles.listAmount}>${expense.amount.$numberDecimal}</Text>
-        </View>
-      )
+  const onSubmit = () => {
+    axios.post('http://localhost:3009/api/expense', {
+      name: itemName,
+      amount: amount,
+      expenseHolder: props.firstName,
+      expenseType: expenseType,
+      householdID: props.householdID
     })
+      .then((result) => {
+        props.fetchData();
+        setAddItemModalVisible(!addItemModalVisible);
+        setItemName('');
+        setAmount('');
+      }, () => {
+        console.log('success')
+      })
+      .catch(err => console.error(err));
+    setNewExpense('');
+    setExpenseType('');
+  };
+
+  const getRoomiesTotals = (expenses) => {
+    let numOfRoomies = 0;
+    let totalExpenses = 0;
+    let roomiesExpenses = {};
+    //Calculate totals
+    for(let i = 0; i < expenses.length; i++){
+      if(!roomiesExpenses[expenses[i].expenseHolder]){
+        numOfRoomies += 1;
+        totalExpenses += parseFloat(expenses[i].amount.$numberDecimal)
+        roomiesExpenses[expenses[i].expenseHolder] = parseFloat(expenses[i].amount.$numberDecimal)
+      } else {
+        totalExpenses += parseFloat(expenses[i].amount.$numberDecimal)
+        roomiesExpenses[expenses[i].expenseHolder] += parseFloat(expenses[i].amount.$numberDecimal)
+      }
+    }
+    //Get average amount owed
+    const averageExpense = totalExpenses / numOfRoomies;
+    let roomiesOwed = {}
+    for(let name in roomiesExpenses) {
+      roomiesOwed[name] =  roomiesExpenses[name] - averageExpense;
+    }
+
+    console.log('roomiesOwed:', roomiesOwed);
+    //assign owed amounts
+    let positive;
+    let youOwe;
+    let theyOwe = [];
+    for (let roomie in roomiesOwed) {
+      if (Math.sign(roomiesOwed[roomie]) === 1) {
+        positive = roomie;
+      }
+      if (Math.sign(roomiesOwed[roomie]) === -1) {
+        youOwe = 'You owe ' + positive + ' ' + (roomiesOwed[roomie] * -1).toFixed(2);
+        theyOwe.push(roomie + ' owes you ' + (roomiesOwed[roomie] * -1).toFixed(2));
+      }
+    }
+    console.log(props.firstName)
+    if (props.firstName === positive) {
+      return (
+        theyOwe.map((owe, index) => {
+          return(
+          <Text key={index}>{owe} {'\n'}</Text>
+          )
+        })
+      )
+    } else {
+    return (<Text>{youOwe}</Text>)
+    }
+  };
+
+  const yourShareTotals = getRoomiesTotals(props.expenses);
+
+
+
+  const fixedExpenses = props.expenses.filter((expense) => {
+    return expense.expenseType === 'Fixed Expense'
+  });
+
+
+  const FixedList = fixedExpenses.map((expense, index) => {
+    return (
+      <View key={index} style={listStyles.listItemContainer}>
+        <View style={listStyles.nameAndHolderContainer}>
+          <Text style={listStyles.listName}>{expense.name}</Text>
+          <Text style={listStyles.listHolder}>{expense.expenseHolder}</Text>
+        </View>
+        <Text style={listStyles.listAmount}>${expense.amount.$numberDecimal}</Text>
+      </View>
+    )
+  });
+
+  const otherExpenses = props.expenses.filter((expense) => {
+    return expense.expenseType === 'Other Expense'
+  });
+
+  const OtherList = otherExpenses.map((expense, index) => {
+    return (
+      <View key={index} style={listStyles.listItemContainer}>
+        <View style={listStyles.nameAndHolderContainer}>
+          <Text style={listStyles.listName}>{expense.name}</Text>
+          <Text style={listStyles.listHolder}>{expense.expenseHolder}</Text>
+        </View>
+        <Text style={listStyles.listAmount}>${expense.amount.$numberDecimal}</Text>
+      </View>
+    )
+  });
+
+    // const YourShare = props.expenses.map((expense, index) => {
+    //   return (
+    //     <View style={{
+    //       flex: 1,
+    //       flexDirection: "row",
+    //       marginTop: 10,
+    //       marginBottom: 10
+    //     }}>
+
+    //       <View style={{
+    //         flex: 1,
+    //         justifyContent: 'center'
+    //       }}>
+    //         <Text
+    //           style={
+    //             styles.dueUser,
+    //             {textDecorationLine: paid ? "line-through" : "none",
+    //               color: paid ? colors.neutralMedium : colors.neutralDark,
+    //               paddingLeft: 8
+    //             }
+    //           }
+    //         >
+    //           {user}
+    //         </Text>
+    //       </View>
+
+    //       <Text
+    //         style={
+    //           styles.dueCost,
+    //           {textDecorationLine: paid ? "line-through" : "none",
+    //             color: paid ? colors.neutralMedium : "black",
+    //             fontSize: 17
+    //           }
+    //         }
+    //       >
+    //         {cost}
+    //       </Text>
+
+    //     </View>
+    //   )
+    // })
+
+
+  const onPress = () =>
+  ActionSheetIOS.showActionSheetWithOptions(
+    {
+      options: ["Cancel", "Fixed Expense", "Other Expense"],
+      destructiveButtonIndex: 2,
+      cancelButtonIndex: 0
+    },
+    buttonIndex => {
+      if (buttonIndex === 0) {
+        // cancel action
+      } else if (buttonIndex === 1) {
+        setExpenseType('Fixed Expense')
+      } else if (buttonIndex === 2) {
+        setExpenseType('Other Expense')
+      }
+    }
+  );
 
 
   return (
@@ -124,6 +219,8 @@ export default function HomeExpenseScreen (props, {navigation}) {
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
           <Text style={modalStyles.modalText}>What did you buy today?</Text>
+          <Button onPress={onPress} title="What type of expense is it?" />
+          <Text>{expenseType}</Text>
             <TextInput
               style={modalStyles.inputField}
               onChangeText={text => setItemName(text)}
@@ -143,6 +240,7 @@ export default function HomeExpenseScreen (props, {navigation}) {
               underlayColor={colors.primaryLighter}
               style={modalStyles.submitButton}
               onPress={() => {
+                onSubmit();
                 setAddItemModalVisible(!addItemModalVisible)
               }}
             >
@@ -162,24 +260,36 @@ export default function HomeExpenseScreen (props, {navigation}) {
       </Modal>
 
 
-
-
-
       <View style={styles.container, {marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 10}}>
 
-        <Text>NOVEMBER</Text>
+        <Text style={{fontSize: 23}}>NOVEMBER</Text>
 
         <Text style={{fontSize: 20, color: "gray", marginTop: 30}}>Fixed Monthly Expenses</Text>
-        <View style={listStyles.listContainer}>
-          {FixedList}
+        <View style={listStyles.listContainer, {height: 165}}>
+            {FixedList}
           </View>
-          <Button title="See all fixed transactions"></Button>
 
-        <Text style={{fontSize: 20, marginTop: 225, color: "gray"}}>Other Household Expenses</Text>
-        <Button title="See all other transactions"></Button>
+          <View style={{alignItems: "center"}}>
+          <TouchableHighlight
+              underlayColor={"white"}>
+                <FontAwesome5 name="ellipsis-h" size={30} color={colors.primaryDark}/>
+            </TouchableHighlight>
+          </View>
 
-        <Text style={{fontSize: 20, marginTop: 30, color: "gray"}}>Your Share</Text>
+        <Text style={{fontSize: 20, marginTop: 5, color: "gray"}}>Other Household Expenses</Text>
+        <View style={listStyles.listContainer, {height: 165}}>
+        {OtherList}
+        </View>
 
+        <View style={{alignItems: "center"}}>
+        <TouchableHighlight
+              underlayColor={"white"}>
+            <FontAwesome5 name="ellipsis-h" size={30} color={colors.primaryDark}/>
+            </TouchableHighlight>
+        </View>
+
+        <Text style={{fontSize: 20, marginTop: 5, color: "gray"}}>Your Share</Text>
+            <Text>{yourShareTotals}</Text>
 
         </View>
     </View>

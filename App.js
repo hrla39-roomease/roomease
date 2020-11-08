@@ -12,6 +12,9 @@ import { firebaseConfig } from './config';
 
 // firebase.initializeApp(firebaseConfig);
 
+console.disableYellowBox = true;
+console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
+
 export default class App extends React.Component {
   render() {
     return (
