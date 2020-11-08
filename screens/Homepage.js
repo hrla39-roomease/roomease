@@ -27,7 +27,7 @@ export default function HomeScreen(props) {
           <Text style={headerStyles.headerText}></Text>
         </View>
         <View style={headerStyles.center}>
-          <Text style={headerStyles.headerTitle}>Home</Text>
+          <Text style={headerStyles.headerTitle}>Welcome Home!</Text>
         </View>
         <View style={headerStyles.right}>
           <TouchableOpacity
@@ -44,6 +44,27 @@ export default function HomeScreen(props) {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
+
+      <View style={styles.mainContentContainer}>
+        <View style={styles.tabHeadingContainer}>
+          <Text style={styles.tabHeadingText}>House Overview</Text>
+        </View>
+      </View>
+      <View style={styles.mainContentContainer}>
+        <View style={styles.tabHeadingContainer}>
+          <Text style={styles.tabHeadingText}>Expenses Summary</Text>
+        </View>
+      </View>
+      <View style={styles.mainContentContainer}>
+        <View style={styles.tabHeadingContainer}>
+          <Text style={styles.tabHeadingText}>Your Chores</Text>
+        </View>
+      </View>
+      <View style={styles.mainContentContainer}>
+        <View style={styles.tabHeadingContainer}>
+          <Text style={styles.tabHeadingText}>Other Household Notes</Text>
+        </View>
+      </View>
 
       <Modal
         animationType="slide"
@@ -171,7 +192,6 @@ export default function HomeScreen(props) {
   )
 }
 
-
 const headerStyles = StyleSheet.create({
   header: {
     backgroundColor: colors.primaryDark,
@@ -219,6 +239,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  mainContentContainer: {
+    // flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    padding: 16,
+    paddingBottom: 0,
+  },
+  tabHeadingContainer: {
+    width: '100%',
+    height: 36,
+    paddingLeft: 10,
+    paddingBottom: 2,
+    justifyContent: 'flex-end',
+    borderBottomWidth: .5,
+    borderColor: colors.neutralMedium,
+  },
+  tabHeadingText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: colors.neutralMedium,
   },
 });
 
