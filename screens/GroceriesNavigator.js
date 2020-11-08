@@ -69,7 +69,8 @@ export default function HomeGroceriesScreen(props) {
             <FontAwesome5
               name="trash-alt"
               size={20}
-              color={colors.neutralMedium}
+              color={
+                grocery.isPurchased ? colors.negative : colors.neutralMedium}
             />
           </TouchableOpacity>
         </View>
