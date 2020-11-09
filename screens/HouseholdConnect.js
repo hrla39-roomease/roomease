@@ -11,6 +11,7 @@ import {
   TextInput,
 } from 'react-native';
 import axios from "axios";
+import firebase from 'firebase';
 
 import colors from '../assets/colors.js';
 
@@ -45,9 +46,6 @@ export default function HouseholdConnect(props) {
         animationType="slide"
         transparent={true}
         visible={createHouseholdModalVisible}
-        // onRequestClose={() => {
-        //   do something
-        // }}
       >
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
@@ -89,33 +87,6 @@ export default function HouseholdConnect(props) {
                 <Text style={modalStyles.textStyle}>Submit</Text>
               </TouchableHighlight>
             </View>
-            {/* <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={modalStyles.submitButton}
-              onPress={() => {
-                axios.post('http://localhost:3009/api/household', {
-                  name: householdName,
-                  householdOwner: firstName,
-                  userID: id,
-                })
-                  .then((result) => {
-                    props.navigation.navigate('DashboardScreen');
-                  })
-                  .catch((err) => console.error(err));
-                setCreateHouseholdModalVisible(!createHouseholdModalVisible)}
-              }
-            >
-              <Text style={modalStyles.textStyle}>Submit</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={modalStyles.cancelButton}
-              onPress={() => {
-                setCreateHouseholdModalVisible(!createHouseholdModalVisible)}
-              }
-            >
-              <Text style={modalStyles.cancelText}>Cancel</Text>
-            </TouchableHighlight> */}
           </View>
         </View>
       </Modal>
@@ -168,46 +139,33 @@ export default function HouseholdConnect(props) {
                 <Text style={modalStyles.textStyle}>Submit</Text>
               </TouchableHighlight>
             </View>
-
-            {/* <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={modalStyles.submitButton}
-              onPress={() => {
-                axios.get(`http://localhost:3009/api/household/${inviteCode}`)
-                  .then((household) => {
-                    axios.put(`http://localhost:3009/api/user/${id}`, {
-                      householdID: household.data._id,
-                      firstName: firstName
-                    })
-                    .then((result) => {
-                      props.navigation.navigate('DashboardScreen');
-                      })
-                      .catch((err) => console.error(err));
-                  })
-                  .catch((err) => console.error(err));
-                  setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
-              }
-            >
-              <Text style={modalStyles.textStyle}>Submit</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={modalStyles.cancelButton}
-              onPress={() => {
-                setJoinHouseholdModalVisible(!joinHouseholdModalVisible)}
-              }
-            >
-              <Text style={modalStyles.cancelText}>Cancel</Text>
-            </TouchableHighlight> */}
           </View>
         </View>
       </Modal>
 
       <View style={styles.overlay}>
         <Text style={styles.h1}>Welcome!</Text>
-        <Text style={styles.paragraph}>Please create a household{'\n'}or join one if your roomie{'\n'}has already set one up.</Text>
-        <AppButton title='Create A Household' onPress={() => setCreateHouseholdModalVisible(true)} buttonStyle={buttonStyles.buttonContainer} textStyle={buttonStyles.buttonText}/>
-        <AppButton title='Join A Household' onPress={() => setJoinHouseholdModalVisible(true)} buttonStyle={buttonStyles.secondaryButtonContainer} textStyle={buttonStyles.secondaryButtonText}/>
+        <Text style={styles.paragraph}>
+          Please create a household{'\n'}or join one if your roomie{'\n'}has already set one up.
+        </Text>
+        <AppButton
+          title='Create A Household'
+          onPress={() => setCreateHouseholdModalVisible(true)}
+          buttonStyle={buttonStyles.buttonContainer}
+          textStyle={buttonStyles.buttonText}
+        />
+        <AppButton
+          title='Join A Household'
+          onPress={() => setJoinHouseholdModalVisible(true)}
+          buttonStyle={buttonStyles.secondaryButtonContainer}
+          textStyle={buttonStyles.secondaryButtonText}
+        />
+        <AppButton
+          title='Log Out'
+          onPress={() => firebase.auth().signOut()}
+          buttonStyle={buttonStyles.logoutBtn}
+          textStyle={buttonStyles.logoutText}
+        />
       </View>
     </ImageBackground>
   )
@@ -232,7 +190,7 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     fontSize: 26,
-    marginBottom: '70%',
+    marginBottom: '60%',
     width: '75%',
     textAlign: 'center',
     color: colors.neutralDark,
@@ -275,7 +233,15 @@ const buttonStyles = StyleSheet.create({
     fontSize: 24,
     color: colors.primary,
     alignSelf: 'center',
-  }
+  },
+  logoutBtn: {
+    margin: 20,
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.primary,
+  },
 })
 
 const modalStyles = StyleSheet.create({
