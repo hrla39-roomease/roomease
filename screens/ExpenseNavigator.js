@@ -218,7 +218,12 @@ export default function HomeExpenseScreen (props, {navigation}) {
           <View style={modalStyles.modalView}>
           <Text style={modalStyles.modalText}>What did you buy today?</Text>
 
-          <Button onPress={onPress} color={colors.primaryDark} title="What type of expense is it?" />
+          <TouchableOpacity
+            onPress={onPress}
+            style={modalStyles.expenseTypeButton}
+          >
+            <Text style={modalStyles.expenseTypeButtonText}>What type of expense is it?</Text>
+          </TouchableOpacity>
 
           <Text>{expenseType}</Text>
             <TextInput
@@ -236,25 +241,27 @@ export default function HomeExpenseScreen (props, {navigation}) {
               placeholder={'Amount'}
               keyboardType={'numeric'}
             />
-            <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={modalStyles.submitButton}
-              onPress={() => {
-                onSubmit();
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-              <Text style={modalStyles.textStyle}>Submit</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={modalStyles.cancelButton}
-              onPress={() => {
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-              <Text style={modalStyles.cancelText}>Cancel</Text>
-            </TouchableHighlight>
+            <View style={modalStyles.buttonsContainer}>
+              <TouchableHighlight
+                underlayColor={colors.primaryLighter}
+                style={modalStyles.submitButton}
+                onPress={() => {
+                  onSubmit();
+                  setAddItemModalVisible(!addItemModalVisible)
+                }}
+              >
+                <Text style={modalStyles.textStyle}>Submit</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={colors.primaryLighter}
+                style={modalStyles.cancelButton}
+                onPress={() => {
+                  setAddItemModalVisible(!addItemModalVisible)
+                }}
+              >
+                <Text style={modalStyles.cancelText}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
           </View>
         </View>
       </Modal>
@@ -403,7 +410,6 @@ const modalStyles = StyleSheet.create({
   },
   modalView: {
     width: '90%',
-    height: "50%",
     backgroundColor: '#fff',
     borderRadius: 25,
     padding: 35,
@@ -417,6 +423,12 @@ const modalStyles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
+  expenseTypeButtonText: {
+    color: colors.primary,
+    fontWeight: '600',
+    fontSize: 17,
+    // textDecorationLine: 'underline',
+  },
   modalText: {
     fontSize: 24,
     color: colors.primaryDark,
@@ -425,9 +437,10 @@ const modalStyles = StyleSheet.create({
   },
   buttonsContainer: {
     width: '100%',
-    paddingTop: 40,
     flexDirection: 'row',
     justifyContent: 'center',
+    flexDirection: 'row-reverse',
+    marginTop: 10,
   },
   submitButton: {
     backgroundColor: colors.primary,
