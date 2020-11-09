@@ -104,7 +104,22 @@ export default function ChoresNavigator(props) {
                   />
                 </Text>
               </View>
-
+              <View style={mainStyles.trashContainer}>
+              </View>
+              <Text
+                style={mainStyles.icon}
+                onPress={() => deleteChore(chore)}
+              >
+                <FontAwesome5
+                  name="trash-alt"
+                  size={20}
+                  color={
+                    chore.isComplete ? colors.negative : colors.neutralMedium
+                  }
+                  style={mainStyles.trashIcon}
+                />
+              </Text>
+            </View>
             </View>
           ))}
         </View>
