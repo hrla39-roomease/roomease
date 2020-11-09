@@ -150,7 +150,9 @@ export default function HomeExpenseScreen (props, {navigation}) {
           textDecorationLine: paid ? "line-through" : "none",
           color: paid ? colors.neutralMedium : colors.neutralDark,
           paddingLeft: 8,
-          fontSize: 17
+          fontSize: 17,
+          marginBottom: 5,
+          marginTop: 5,
         }}>{roomie}</Text>
 
       <Text
@@ -159,7 +161,9 @@ export default function HomeExpenseScreen (props, {navigation}) {
           textDecorationLine: paid ? "line-through" : "none",
           color: paid ? colors.neutralMedium : colors.neutralDark,
           paddingLeft: 8,
-          fontSize: 17
+          fontSize: 17,
+          marginBottom: 5,
+          marginTop: 5,
           }}>${amount}</Text>
 
     </View>
@@ -269,39 +273,19 @@ export default function HomeExpenseScreen (props, {navigation}) {
 
       <View style={styles.containerBody}>
 
-        <Text style={{fontSize: 23}}>NOVEMBER</Text>
+        <Text style={{fontSize: 35, color: colors.primary, textAlign: "center", fontWeight: "bold"}}>NOVEMBER</Text>
 
-        <Text style={listStyles.listTitles, {color: "gray",fontSize: 20, marginTop: 15}}>Fixed Monthly Expenses</Text>
+        <Text style={listStyles.listTitles, {color: "gray",fontSize: 25, marginTop: 5}}>Fixed Monthly Expenses</Text>
         <View style={listStyles.listContainer, {height: 227, overflow: "hidden"}}>
             {FixedList}
           </View>
 
-          <View style={listStyles.listMoreBtn}>
-          <TouchableHighlight
-              underlayColor={"white"}>
-
-                <FontAwesome5
-                  name="ellipsis-h"
-                  size={30}
-                  color={colors.primaryDark}
-
-                  />
-            </TouchableHighlight>
-          </View>
-
-          <Text style={listStyles.listTitles, {color: "gray",fontSize: 20, marginTop: 5}}>Other Household Expenses</Text>
+          <Text style={listStyles.listTitles, {color: "gray",fontSize: 25, marginTop: 5}}>Other Household Expenses</Text>
         <View style={listStyles.listContainer, {height: 227, overflow: "hidden"}}>
           {OtherList}
         </View>
 
-        <View style={listStyles.listMoreBtn}>
-          <TouchableHighlight
-                underlayColor={"white"}>
-              <FontAwesome5 name="ellipsis-h" size={30} color={colors.primaryDark}/>
-              </TouchableHighlight>
-        </View>
-
-        <Text style={{fontSize: 20, marginTop: 5, color: "gray"}}>Your Share</Text>
+        <Text style={{fontSize: 25, marginTop: 10, color: "gray", marginBottom: 5}}>Your Share</Text>
           {yourShareTotals}
 
         </View>
@@ -348,18 +332,18 @@ const listStyles = StyleSheet.create({
     flex: 2,
   },
   listName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '500',
     alignItems: "flex-start",
     color: colors.neutralDark,
   },
   listHolder: {
-    fontSize: 13,
+    fontSize: 15,
     alignItems: "flex-start",
-    color: colors.primary
+    color: colors.secondary
   },
   listAmount: {
-    fontSize: 18,
+    fontSize: 20,
     alignItems: "flex-end"
   },
 });
