@@ -89,6 +89,7 @@ export default function DashboardScreen(props) {
             lastName={lastName}
             householdName={householdName}
             householdID={householdID}
+            groceries={groceries}
           />
           }
           options={{
@@ -122,6 +123,7 @@ export default function DashboardScreen(props) {
             householdID={householdID}
             chores={chores}
             users={users}
+            fetchData={fetchData}
           />
           }
           options={{

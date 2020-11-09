@@ -27,7 +27,7 @@ export default function HomeScreen(props) {
           <Text style={headerStyles.headerText}></Text>
         </View>
         <View style={headerStyles.center}>
-          <Text style={headerStyles.headerTitle}>Home</Text>
+          <Text style={headerStyles.headerTitle}>Welcome Home!</Text>
         </View>
         <View style={headerStyles.right}>
           <TouchableOpacity
@@ -44,6 +44,74 @@ export default function HomeScreen(props) {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
+
+      <View style={styles.mainContainer}>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>House Overview</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Street Sweeping: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextPrimary}>Fridays, 8–10am</Text>
+            </View>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Trash Day: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextPrimary}>Fridays</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>Expenses Summary</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>You owe Alvin: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextBoldRed}>$150.00</Text>
+            </View>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Nick owes you: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextBoldGreen}>$50.00</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>Your Chores</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Peeling berries </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextPrimary}>(Thursday, November 12)</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>Other Household Notes</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+          <Text style={styles.tabTextBoldNeutral}>• There are {props.groceries.length} items in your household grocery list</Text>
+            </View>
+          </View>
+        </View>
+      </View>
 
       <Modal
         animationType="slide"
@@ -90,7 +158,7 @@ export default function HomeScreen(props) {
                   }}
                 >
                   <View style={modalStyles.buttonInner}>
-                    <FontAwesome5 name="cog" size={16} color={colors.neutralDark} />
+                    <FontAwesome5 name="cog" size={16} color='#444' />
                     <Text style={modalStyles.manageAccountText}>
                       Manage Your Account
                     </Text>
@@ -106,7 +174,7 @@ export default function HomeScreen(props) {
                 <Text style={{
                   fontSize: 16,
                   fontWeight: '600',
-                  color: colors.neutralDark,
+                  color: colors.primary,
                   marginLeft: 5,
                 }}>
                   {props.householdName}
@@ -120,7 +188,7 @@ export default function HomeScreen(props) {
                 }}>
                   Household Invite Code:
                 </Text>
-                <Text style={modalStyles.householdName}>
+                <Text style={modalStyles.householdID}>
                   {props.householdID}
                 </Text>
               </View>
@@ -133,7 +201,7 @@ export default function HomeScreen(props) {
                   }}
                 >
                   <View style={modalStyles.buttonInner}>
-                    <FontAwesome5 name="home" size={16} color={colors.neutralDark} />
+                    <FontAwesome5 name="home" size={16} color='#444' />
                     <Text style={modalStyles.manageAccountText}>
                       Manage Your Household
                     </Text>
@@ -151,7 +219,7 @@ export default function HomeScreen(props) {
                   }}
                 >
                   <View style={modalStyles.buttonInner}>
-                    <FontAwesome5 name="arrow-alt-circle-left" size={16} color={colors.neutralDark} />
+                    <FontAwesome5 name="arrow-alt-circle-left" size={16} color='#444' />
                     <Text style={modalStyles.manageAccountText}>
                       Logout
                     </Text>
@@ -170,7 +238,6 @@ export default function HomeScreen(props) {
     </View>
   )
 }
-
 
 const headerStyles = StyleSheet.create({
   header: {
@@ -219,6 +286,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  mainContainer: {
+    width: '100%',
+    alignItems: 'center',
+    padding: 16,
+    paddingBottom: 0,
+  },
+  tabContainer: {
+    width: '100%',
+    marginBottom: 14,
+  },
+  tabHeadingContainer: {
+    width: '100%',
+    height: 36,
+    paddingLeft: 1,
+    paddingBottom: 2,
+    // alignItems: 'center',
+    justifyContent: 'flex-end',
+    borderBottomWidth: .5,
+    borderColor: colors.neutralMedium,
+  },
+  tabHeadingText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: colors.neutralMedium,
+  },
+  tabContent: {
+    padding: 10,
+    paddingTop: 8,
+    paddingBottom: 0,
+    flexDirection: 'row',
+  },
+  tabContentLeft: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexGrow: 1,
+    flexWrap: 'wrap',
+  },
+  tabContentRight: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  tabContentText: {
+    color: colors.neutralDark,
+    fontSize: 15,
+  },
+  tabTextPrimary: {
+    color: colors.primary,
+    fontSize: 15,
+  },
+  tabTextBoldPrimary: {
+    color: colors.primary,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  tabTextBoldNeutral: {
+    color: colors.neutralDark,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  tabTextBoldGreen: {
+    color: colors.secondary,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  tabTextBoldRed: {
+    color: colors.negative,
+    fontSize: 15,
+    fontWeight: '500',
   },
 });
 
@@ -288,10 +425,10 @@ const modalStyles = StyleSheet.create({
     fontSize: 16,
     color: colors.neutralDark,
   },
-  householdName: {
+  householdID: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutralDark,
+    color: colors.primary,
   },
   logoutContainer: {
     margin: 20,

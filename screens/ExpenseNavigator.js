@@ -5,8 +5,6 @@ import colors from '../assets/colors.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
-import OtherHouseholdExpenses from './OtherHouseholdExpenses.js'
-import FixedMonthlyExpenses from './FixedMonthlyExpenses.js'
 
 const Stack = createStackNavigator();
 
@@ -168,6 +166,7 @@ export default function HomeExpenseScreen (props, {navigation}) {
     )
   }
 
+
   const yourShareTotals = getRoomiesTotals(props.expenses);
 
   const onPress = () =>
@@ -218,7 +217,9 @@ export default function HomeExpenseScreen (props, {navigation}) {
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
           <Text style={modalStyles.modalText}>What did you buy today?</Text>
+
           <Button onPress={onPress} color={colors.primaryDark} title="What type of expense is it?" />
+
           <Text>{expenseType}</Text>
             <TextInput
               style={modalStyles.inputField}

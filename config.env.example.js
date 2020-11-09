@@ -1,0 +1,2 @@
+const MONGODB = 'MONGO-CLOUD-DB-CONNECTION';
+module.exports = MONGODB;
