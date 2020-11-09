@@ -91,35 +91,19 @@ export default function ChoresNavigator(props) {
                   </Text>
                 </View>
                 <View style={mainStyles.trashContainer}>
+                  <Text
+                    style={mainStyles.icon}
+                    onPress={() => deleteChore(chore)}
+                  >
+                    <FontAwesome5
+                      name="trash-alt"
+                      size={20}
+                      color={colors.neutralMedium}
+                      style={mainStyles.trashIcon}
+                    />
+                  </Text>
                 </View>
-                <Text
-                  style={mainStyles.icon}
-                  onPress={() => deleteChore(chore)}
-                >
-                  <FontAwesome5
-                    name="trash-alt"
-                    size={20}
-                    color={colors.neutralMedium}
-                    style={mainStyles.trashIcon}
-                  />
-                </Text>
               </View>
-              <View style={mainStyles.trashContainer}>
-              </View>
-              <Text
-                style={mainStyles.icon}
-                onPress={() => deleteChore(chore)}
-              >
-                <FontAwesome5
-                  name="trash-alt"
-                  size={20}
-                  color={
-                    chore.isComplete ? colors.negative : colors.neutralMedium
-                  }
-                  style={mainStyles.trashIcon}
-                />
-              </Text>
-            </View>
             </View>
           ))}
         </View>
@@ -181,10 +165,10 @@ export default function ChoresNavigator(props) {
   // TODO: update chore to complete/incomplete
   const toggleComplete = (chore) => {
     axios.put(`http://localhost:3009/api/chore/${chore._id}`,
-    {
-      chore: chore,
-      householdID: props.householdID
-    })
+      {
+        chore: chore,
+        householdID: props.householdID
+      })
       .then(result => props.fetchData())
       .catch(err => console.error(err));
   }
@@ -207,7 +191,7 @@ export default function ChoresNavigator(props) {
         <View style={headerStyles.right}>
           <TouchableOpacity
             underlayColor={colors.primaryLighterBlue}
-            style={{ marginRight: 8}}
+            style={{ marginRight: 8 }}
             onPress={() => {
               setAddItemModalVisible(!addItemModalVisible)
             }}
@@ -241,7 +225,7 @@ export default function ChoresNavigator(props) {
               <View style={modalStyles.assignChoreContainer}>
                 <Text style={modalStyles.choreAssignedToText}>Chore assigned to: </Text>
                 {assignedUser === '' ?
-                  <Button onPress={onPress} title="Assign Chore" color={colors.primary} fontSize={20}/> :
+                  <Button onPress={onPress} title="Assign Chore" color={colors.primary} fontSize={20} /> :
                   <TouchableOpacity
                     style={modalStyles.assignedUserButton}
                     onPress={onPress}
