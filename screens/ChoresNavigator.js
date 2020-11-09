@@ -97,7 +97,9 @@ export default function ChoresNavigator(props) {
                 <FontAwesome5
                   name="trash-alt"
                   size={20}
-                  color={colors.neutralMedium}
+                  color={
+                    chore.isComplete ? colors.negative : colors.neutralMedium
+                  }
                   style={mainStyles.trashIcon}
                 />
               </Text>
