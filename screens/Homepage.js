@@ -45,24 +45,71 @@ export default function HomeScreen(props) {
         </View>
       </SafeAreaView>
 
-      <View style={styles.mainContentContainer}>
-        <View style={styles.tabHeadingContainer}>
-          <Text style={styles.tabHeadingText}>House Overview</Text>
+      <View style={styles.mainContainer}>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>House Overview</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Street Sweeping: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextPrimary}>Fridays, 8–10am</Text>
+            </View>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Trash Day: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextPrimary}>Fridays</Text>
+            </View>
+          </View>
         </View>
-      </View>
-      <View style={styles.mainContentContainer}>
-        <View style={styles.tabHeadingContainer}>
-          <Text style={styles.tabHeadingText}>Expenses Summary</Text>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>Expenses Summary</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>You owe Alvin: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextBoldRed}>$150.00</Text>
+            </View>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Nick owes you: </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextBoldGreen}>$50.00</Text>
+            </View>
+          </View>
         </View>
-      </View>
-      <View style={styles.mainContentContainer}>
-        <View style={styles.tabHeadingContainer}>
-          <Text style={styles.tabHeadingText}>Your Chores</Text>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>Your Chores</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>Peeling berries </Text>
+            </View>
+            <View style={styles.tabContentRight}>
+              <Text style={styles.tabTextPrimary}>(Thursday, November 12)</Text>
+            </View>
+          </View>
         </View>
-      </View>
-      <View style={styles.mainContentContainer}>
-        <View style={styles.tabHeadingContainer}>
-          <Text style={styles.tabHeadingText}>Other Household Notes</Text>
+        <View style={styles.tabContainer}>
+          <View style={styles.tabHeadingContainer}>
+            <Text style={styles.tabHeadingText}>Other Household Notes</Text>
+          </View>
+          <View style={styles.tabContent}>
+            <View style={styles.tabContentLeft}>
+              <Text style={styles.tabTextBoldNeutral}>There are 5 items in your household grocery list</Text>
+            </View>
+          </View>
         </View>
       </View>
 
@@ -240,18 +287,22 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  mainContentContainer: {
-    // flex: 1,
+  mainContainer: {
     width: '100%',
     alignItems: 'center',
     padding: 16,
     paddingBottom: 0,
   },
+  tabContainer: {
+    width: '100%',
+    marginBottom: 14,
+  },
   tabHeadingContainer: {
     width: '100%',
     height: 36,
-    paddingLeft: 10,
+    paddingLeft: 1,
     paddingBottom: 2,
+    // alignItems: 'center',
     justifyContent: 'flex-end',
     borderBottomWidth: .5,
     borderColor: colors.neutralMedium,
@@ -260,6 +311,51 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: colors.neutralMedium,
+  },
+  tabContent: {
+    padding: 10,
+    paddingTop: 8,
+    paddingBottom: 0,
+    flexDirection: 'row',
+  },
+  tabContentLeft: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexGrow: 1,
+    flexWrap: 'wrap',
+  },
+  tabContentRight: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  tabContentText: {
+    color: colors.neutralDark,
+    fontSize: 15,
+  },
+  tabTextPrimary: {
+    color: colors.primary,
+    fontSize: 15,
+  },
+  tabTextBoldPrimary: {
+    color: colors.primary,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  tabTextBoldNeutral: {
+    color: colors.neutralDark,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  tabTextBoldGreen: {
+    color: colors.secondary,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  tabTextBoldRed: {
+    color: colors.negative,
+    fontSize: 15,
+    fontWeight: '500',
   },
 });
 
