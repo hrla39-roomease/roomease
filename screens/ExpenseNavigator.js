@@ -173,7 +173,7 @@ export default function HomeExpenseScreen (props, {navigation}) {
   ActionSheetIOS.showActionSheetWithOptions(
     {
       options: ["Cancel", "Fixed Expense", "Other Expense"],
-      destructiveButtonIndex: 2,
+      // destructiveButtonIndex: 2,
       cancelButtonIndex: 0
     },
     buttonIndex => {
@@ -190,23 +190,23 @@ export default function HomeExpenseScreen (props, {navigation}) {
   return (
     <View style={styles.container}>
       <SafeAreaView style={headerStyles.header}>
-          <View style={headerStyles.left}>
-            <Text style={headerStyles.headerText}></Text>
-          </View>
-          <View style={headerStyles.center}>
-            <Text style={headerStyles.headerTitle}>Expenses</Text>
-          </View>
-          <View style={headerStyles.right}>
-            <TouchableHighlight
-              underlayColor={colors.primaryLighter}
-              style={{marginRight: 8}}
-              onPress={() => {
-                setAddItemModalVisible(!addItemModalVisible)
-              }}
-            >
-                <FontAwesome5 name="plus" size={18} color="white"/>
-            </TouchableHighlight>
-          </View>
+        <View style={headerStyles.left}>
+          <Text style={headerStyles.headerText}></Text>
+        </View>
+        <View style={headerStyles.center}>
+          <Text style={headerStyles.headerTitle}>Expenses</Text>
+        </View>
+        <View style={headerStyles.right}>
+          <TouchableHighlight
+            underlayColor={colors.primaryLighter}
+            style={{ marginRight: 8 }}
+            onPress={() => {
+              setAddItemModalVisible(!addItemModalVisible)
+            }}
+          >
+            <FontAwesome5 name="plus" size={18} color="white" />
+          </TouchableHighlight>
+        </View>
       </SafeAreaView>
 
       <Modal
@@ -216,16 +216,26 @@ export default function HomeExpenseScreen (props, {navigation}) {
       >
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
-          <Text style={modalStyles.modalText}>What did you buy today?</Text>
+            <Text style={modalStyles.modalText}>
+              What did you buy today?
+            </Text>
 
-          <TouchableOpacity
-            onPress={onPress}
-            style={modalStyles.expenseTypeButton}
-          >
-            <Text style={modalStyles.expenseTypeButtonText}>What type of expense is it?</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onPress}
+              style={modalStyles.expenseTypeButton}
+            >
+              {/* Expense type—if expense is chosen,
+                  replace button with expense type:  */}
+              {expenseType === '' ?
+                <Text style={modalStyles.expenseTypeButtonText}
+                >What type of expense is it?
+                </Text> :
+                <Text style={modalStyles.expenseTypeButtonText}
+                >{expenseType}
+                </Text>
+              }
+            </TouchableOpacity>
 
-          <Text>{expenseType}</Text>
             <TextInput
               style={modalStyles.inputField}
               onChangeText={text => setItemName(text)}
@@ -427,7 +437,7 @@ const modalStyles = StyleSheet.create({
     color: colors.primary,
     fontWeight: '600',
     fontSize: 17,
-    // textDecorationLine: 'underline',
+    marginBottom: 8,
   },
   modalText: {
     fontSize: 24,
