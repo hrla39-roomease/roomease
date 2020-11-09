@@ -60,32 +60,48 @@ export default function ChoresNavigator(props) {
         return true;
       }
     })
-    return (
-      <View key={index}>
-        <View style={mainStyles.dateHeader}>
-          <Text style={mainStyles.dateText}>{day.wordDay}, {day.month} {day.day}</Text>
-        </View>
 
-        {choresOfDay.map((chore, index) => (
-          <View style={mainStyles.mainChoreContainer} key={index}>
-            <View style={mainStyles.choreContainer}>
-              <FontAwesome5
-                name={chore.isComplete ? "check-circle" : "circle"}
-                size={24}
-                color={chore.isComplete ? colors.neutralMedium : colors.primary}
-                onPress={() => toggleComplete(chore)}
-                style={mainStyles.checkIcon}
-              />
-              <View style={mainStyles.choreAndUserContainer}>
+    if (choresOfDay.length > 0) {
+      return (
+        <View key={index}>
+          <View style={mainStyles.dateHeader}>
+            <Text style={mainStyles.dateText}>{day.wordDay}, {day.month} {day.day}</Text>
+          </View>
+
+          {choresOfDay.map((chore, index) => (
+            <View style={mainStyles.mainChoreContainer} key={index}>
+              <View style={mainStyles.choreContainer}>
+                <FontAwesome5
+                  name={chore.isComplete ? "check-circle" : "circle"}
+                  size={24}
+                  color={chore.isComplete ? colors.neutralMedium : colors.primary}
+                  onPress={() => toggleComplete(chore)}
+                  style={mainStyles.checkIcon}
+                />
+                <View style={mainStyles.choreAndUserContainer}>
+                  <Text
+                    style={chore.isComplete ? mainStyles.isComplete : mainStyles.choreName}
+                  >
+                    {chore.name}
+                  </Text>
+                  <Text
+                    style={chore.isComplete ? mainStyles.userComplete : mainStyles.userChore}
+                  >
+                    {chore.choreHolder}
+                  </Text>
+                </View>
+                <View style={mainStyles.trashContainer}>
+                </View>
                 <Text
-                  style={chore.isComplete ? mainStyles.isComplete : mainStyles.choreName}
+                  style={mainStyles.icon}
+                  onPress={() => deleteChore(chore)}
                 >
-                  {chore.name}
-                </Text>
-                <Text
-                  style={chore.isComplete ? mainStyles.userComplete : mainStyles.userChore}
-                >
-                  {chore.choreHolder}
+                  <FontAwesome5
+                    name="trash-alt"
+                    size={20}
+                    color={colors.neutralMedium}
+                    style={mainStyles.trashIcon}
+                  />
                 </Text>
               </View>
               <View style={mainStyles.trashContainer}>
@@ -104,11 +120,13 @@ export default function ChoresNavigator(props) {
                 />
               </Text>
             </View>
-
-          </View>
-        ))}
-      </View>
-    )
+            </View>
+          ))}
+        </View>
+      )
+    } else {
+      return null
+    }
   });
 
   const onChange = (event, selectedDate) => {
