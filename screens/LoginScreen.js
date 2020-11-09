@@ -59,9 +59,6 @@ export default class LoginScreen extends Component {
               last_name: result.additionalUserInfo.profile.family_name,
               created_at: Date.now()
             })
-            .then((snapshot) => {
-              console.log(snapshot)
-            })
             // add user to mongodb with firebase UID
             axios.post('http://localhost:3009/signup', {
               firstName: result.additionalUserInfo.profile.given_name,
@@ -69,13 +66,12 @@ export default class LoginScreen extends Component {
               pictureURL: result.additionalUserInfo.profile.picture,
               firebaseAuthID: result.user.uid,
             })
-              .then(res => console.log('success'))
+              .then(res => console.log('Added to the DB'))
               .catch(err => console.error(err));
           } else {
             firebase.database().ref('/users/' + result.user.uid).update({
               last_logged_in: Date.now()
             })
-            // get user data from mongodb
           }
         })
         .catch((error) => {
