@@ -107,7 +107,7 @@ export default function HomeScreen(props) {
           </View>
           <View style={styles.tabContent}>
             <View style={styles.tabContentLeft}>
-              <Text style={styles.tabTextBoldNeutral}>There are 5 items in your household grocery list</Text>
+          <Text style={styles.tabTextBoldNeutral}>• There are {props.groceries.length} items in your household grocery list</Text>
             </View>
           </View>
         </View>
