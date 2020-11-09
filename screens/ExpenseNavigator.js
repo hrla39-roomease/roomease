@@ -8,6 +8,7 @@ import axios from 'axios';
 
 const Stack = createStackNavigator();
 
+
 export default function HomeExpenseScreen (props, {navigation}) {
   // STATE:
   const [addItemModalVisible, setAddItemModalVisible] = useState(false);
@@ -39,60 +40,6 @@ export default function HomeExpenseScreen (props, {navigation}) {
     setNewExpense('');
     setExpenseType('');
   };
-
-  const getRoomiesTotals = (expenses) => {
-    let numOfRoomies = 0;
-    let totalExpenses = 0;
-    let roomiesExpenses = {};
-    //Calculate totals
-    for(let i = 0; i < expenses.length; i++){
-      if(!roomiesExpenses[expenses[i].expenseHolder]){
-        numOfRoomies += 1;
-        totalExpenses += parseFloat(expenses[i].amount.$numberDecimal)
-        roomiesExpenses[expenses[i].expenseHolder] = parseFloat(expenses[i].amount.$numberDecimal)
-      } else {
-        totalExpenses += parseFloat(expenses[i].amount.$numberDecimal)
-        roomiesExpenses[expenses[i].expenseHolder] += parseFloat(expenses[i].amount.$numberDecimal)
-      }
-    }
-    //Get average amount owed
-    const averageExpense = totalExpenses / numOfRoomies;
-    let roomiesOwed = {}
-    for(let name in roomiesExpenses) {
-      roomiesOwed[name] =  roomiesExpenses[name] - averageExpense;
-    }
-
-    console.log('roomiesOwed:', roomiesOwed);
-    //assign owed amounts
-    let positive;
-    let youOwe;
-    let theyOwe = [];
-    for (let roomie in roomiesOwed) {
-      if (Math.sign(roomiesOwed[roomie]) === 1) {
-        positive = roomie;
-      }
-      if (Math.sign(roomiesOwed[roomie]) === -1) {
-        youOwe = 'You owe ' + positive + ' ' + (roomiesOwed[roomie] * -1).toFixed(2);
-        theyOwe.push(roomie + ' owes you ' + (roomiesOwed[roomie] * -1).toFixed(2));
-      }
-    }
-    console.log(props.firstName)
-    if (props.firstName === positive) {
-      return (
-        theyOwe.map((owe, index) => {
-          return(
-          <Text key={index}>{owe} {'\n'}</Text>
-          )
-        })
-      )
-    } else {
-    return (<Text>{youOwe}</Text>)
-    }
-  };
-
-  const yourShareTotals = getRoomiesTotals(props.expenses);
-
-
 
   const fixedExpenses = props.expenses.filter((expense) => {
     return expense.expenseType === 'Fixed Expense'
@@ -127,48 +74,100 @@ export default function HomeExpenseScreen (props, {navigation}) {
     )
   });
 
-    // const YourShare = props.expenses.map((expense, index) => {
-    //   return (
-    //     <View style={{
-    //       flex: 1,
-    //       flexDirection: "row",
-    //       marginTop: 10,
-    //       marginBottom: 10
-    //     }}>
+  const getRoomiesTotals = (expenses) => {
+    let numOfRoomies = 0;
+    let totalExpenses = 0;
+    let roomiesExpenses = {};
+    //Calculate totals
+    for(let i = 0; i < expenses.length; i++){
+      if(!roomiesExpenses[expenses[i].expenseHolder]){
+        numOfRoomies += 1;
+        totalExpenses += parseFloat(expenses[i].amount.$numberDecimal)
+        roomiesExpenses[expenses[i].expenseHolder] = parseFloat(expenses[i].amount.$numberDecimal)
+      } else {
+        totalExpenses += parseFloat(expenses[i].amount.$numberDecimal)
+        roomiesExpenses[expenses[i].expenseHolder] += parseFloat(expenses[i].amount.$numberDecimal)
+      }
+    }
+    //Get average amount owed
+    const averageExpense = totalExpenses / numOfRoomies;
+    let roomiesOwed = {}
+    for(let name in roomiesExpenses) {
+      roomiesOwed[name] =  roomiesExpenses[name] - averageExpense;
+    }
+    console.log('roomiesOwed:', roomiesOwed);
+    //assign owed amounts
+    let positive;
+    let youOwe = [];
+    let theyOwe = [];
+    for (let roomie in roomiesOwed) {
+      if (Math.sign(roomiesOwed[roomie]) === 1) {
+        positive = roomie;
+      }
+      if (Math.sign(roomiesOwed[roomie]) === -1) {
+        theyOwe.push([roomie + ' owes you ' , (roomiesOwed[roomie] * -1).toFixed(2)]);
+        if (props.firstName === roomie){
+          youOwe.push(['You owe ' + positive , (roomiesOwed[roomie] * -1).toFixed(2)]);
+        }
+      }
+    }
+    if (props.firstName === positive) {
+      return (
+        theyOwe.map((touple, index) => {
+          return(
+            <YourShare key={index} roomie={touple[0]} amount={touple[1]}/>
+          )
+        })
+      )
+    } else {
+      return (
+        youOwe.map((touple, index) => {
+          return (
+            <YourShare key={index} roomie={touple[0]} amount={touple[1]} />
+          )
+        })
+      )
+    }
+  };
 
-    //       <View style={{
-    //         flex: 1,
-    //         justifyContent: 'center'
-    //       }}>
-    //         <Text
-    //           style={
-    //             styles.dueUser,
-    //             {textDecorationLine: paid ? "line-through" : "none",
-    //               color: paid ? colors.neutralMedium : colors.neutralDark,
-    //               paddingLeft: 8
-    //             }
-    //           }
-    //         >
-    //           {user}
-    //         </Text>
-    //       </View>
+    // Your share checkbox styling changes
+  function YourShare({roomie, amount}) {
+    const [paid, setPaid] = useState(false);
+    return (
+      <View style={{flexDirection: "row", alignItems: "center"}}>
+      <FontAwesome5 name="circle" size={24}
+        onPress={() => {
+          setPaid(!paid)
+        }}
+        size={24}
+        color={paid ? colors.neutralMedium : colors.primary}
+        name={paid ? "check-circle" : "circle"}
+      />
 
-    //       <Text
-    //         style={
-    //           styles.dueCost,
-    //           {textDecorationLine: paid ? "line-through" : "none",
-    //             color: paid ? colors.neutralMedium : "black",
-    //             fontSize: 17
-    //           }
-    //         }
-    //       >
-    //         {cost}
-    //       </Text>
+      <Text
+        style={{
+          alignItems: "flex-start",
+          textDecorationLine: paid ? "line-through" : "none",
+          color: paid ? colors.neutralMedium : colors.neutralDark,
+          paddingLeft: 8,
+          fontSize: 17
+        }}>{roomie}</Text>
 
-    //     </View>
-    //   )
-    // })
+      <Text
+        style={{
+          marginLeft: "auto",
+          textDecorationLine: paid ? "line-through" : "none",
+          color: paid ? colors.neutralMedium : colors.neutralDark,
+          paddingLeft: 8,
+          fontSize: 17
+          }}>${amount}</Text>
 
+    </View>
+    )
+  }
+
+
+  const yourShareTotals = getRoomiesTotals(props.expenses);
 
   const onPress = () =>
   ActionSheetIOS.showActionSheetWithOptions(
@@ -187,7 +186,6 @@ export default function HomeExpenseScreen (props, {navigation}) {
       }
     }
   );
-
 
   return (
     <View style={styles.container}>
@@ -219,7 +217,9 @@ export default function HomeExpenseScreen (props, {navigation}) {
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
           <Text style={modalStyles.modalText}>What did you buy today?</Text>
-          <Button onPress={onPress} title="What type of expense is it?" />
+
+          <Button onPress={onPress} color={colors.primaryDark} title="What type of expense is it?" />
+
           <Text>{expenseType}</Text>
             <TextInput
               style={modalStyles.inputField}
@@ -260,75 +260,71 @@ export default function HomeExpenseScreen (props, {navigation}) {
       </Modal>
 
 
-      <View style={styles.container, {marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 10}}>
+      <View style={styles.containerBody}>
 
         <Text style={{fontSize: 23}}>NOVEMBER</Text>
 
-        <Text style={{fontSize: 20, color: "gray", marginTop: 30}}>Fixed Monthly Expenses</Text>
-        <View style={listStyles.listContainer, {height: 165}}>
+        <Text style={listStyles.listTitles, {color: "gray",fontSize: 20, marginTop: 15}}>Fixed Monthly Expenses</Text>
+        <View style={listStyles.listContainer, {height: 227, overflow: "hidden"}}>
             {FixedList}
           </View>
 
-          <View style={{alignItems: "center"}}>
+          <View style={listStyles.listMoreBtn}>
           <TouchableHighlight
               underlayColor={"white"}>
-                <FontAwesome5 name="ellipsis-h" size={30} color={colors.primaryDark}/>
+
+                <FontAwesome5
+                  name="ellipsis-h"
+                  size={30}
+                  color={colors.primaryDark}
+
+                  />
             </TouchableHighlight>
           </View>
 
-        <Text style={{fontSize: 20, marginTop: 5, color: "gray"}}>Other Household Expenses</Text>
-        <View style={listStyles.listContainer, {height: 165}}>
-        {OtherList}
+          <Text style={listStyles.listTitles, {color: "gray",fontSize: 20, marginTop: 5}}>Other Household Expenses</Text>
+        <View style={listStyles.listContainer, {height: 227, overflow: "hidden"}}>
+          {OtherList}
         </View>
 
-        <View style={{alignItems: "center"}}>
-        <TouchableHighlight
-              underlayColor={"white"}>
-            <FontAwesome5 name="ellipsis-h" size={30} color={colors.primaryDark}/>
-            </TouchableHighlight>
+        <View style={listStyles.listMoreBtn}>
+          <TouchableHighlight
+                underlayColor={"white"}>
+              <FontAwesome5 name="ellipsis-h" size={30} color={colors.primaryDark}/>
+              </TouchableHighlight>
         </View>
 
         <Text style={{fontSize: 20, marginTop: 5, color: "gray"}}>Your Share</Text>
-            <Text>{yourShareTotals}</Text>
+          {yourShareTotals}
 
         </View>
     </View>
-  );
-}
+  )
+};
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // alignItems: 'center',
+    flex: 1
   },
-  addButton: {
-    fontSize: 200
-  },
- listExpenseItem: {
-    fontSize: 16,
-    alignItems: "flex-start"
-  },
-
-  dueUser: {
-    fontSize: 17,
-  },
-  yourShareBox: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center"
+  containerBody: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+    marginBottom: 10
   }
 });
 
 const listStyles = StyleSheet.create({
   listContainer: {
     flex: 1,
-    // flexWrap: 'wrap',
-    // alignItems: 'center',
   },
   listTitles: {
     borderBottomWidth: 0.5,
     borderColor: colors.neutralMedium
+  },
+  listMoreBtn: {
+    alignItems: "center",
   },
   listItemContainer: {
     flexDirection: 'row',
@@ -337,7 +333,6 @@ const listStyles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: colors.neutralMedium,
     height: 40,
-    // justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
     marginTop: 5
@@ -346,7 +341,6 @@ const listStyles = StyleSheet.create({
     flex: 2,
   },
   listName: {
-    // marginLeft: 8,
     fontSize: 16,
     fontWeight: '500',
     alignItems: "flex-start",
@@ -355,12 +349,12 @@ const listStyles = StyleSheet.create({
   listHolder: {
     fontSize: 13,
     alignItems: "flex-start",
-    color: colors.secondary
+    color: colors.primary
   },
   listAmount: {
     fontSize: 18,
     alignItems: "flex-end"
-  }
+  },
 });
 
 const headerStyles = StyleSheet.create({
@@ -406,17 +400,14 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
     width: '90%',
-    height: '90%',
+    height: "50%",
     backgroundColor: '#fff',
     borderRadius: 25,
     padding: 35,
-    paddingTop: '50%',
     alignItems: 'center',
-    // justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -426,14 +417,26 @@ const modalStyles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
+  modalText: {
+    fontSize: 24,
+    color: colors.primaryDark,
+    marginBottom: 26,
+    textAlign: 'center'
+  },
+  buttonsContainer: {
+    width: '100%',
+    paddingTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   submitButton: {
     backgroundColor: colors.primary,
     borderRadius: 20,
     padding: 10,
     width: '40%',
     elevation: 2,
-    marginBottom: 8,
-    marginTop: 8
+    marginLeft: 4,
+    flex: 1,
   },
   cancelButton: {
     backgroundColor: '#fff',
@@ -442,7 +445,9 @@ const modalStyles = StyleSheet.create({
     borderColor: colors.primary,
     padding: 10,
     width: '40%',
-    elevation: 2
+    elevation: 2,
+    marginRight: 4,
+    flex: 1
   },
   textStyle: {
     fontSize: 16,
@@ -454,12 +459,6 @@ const modalStyles = StyleSheet.create({
     fontSize: 16,
     color: colors.primary,
     fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    fontSize: 24,
-    marginTop: 70,
-    marginBottom: 26,
     textAlign: 'center'
   },
   inputField: {
