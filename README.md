@@ -3,7 +3,7 @@
 
 ### About:
 
-Room-ease is a mobile application made with React Native connected to a Firebase and Mongo database to help strangers, friends or even just roommates oraganize their household with ease!
+Room-ease is a mobile application made with React Native connected to a Firebase and Mongo database to help strangers, friends or even just roommates organize their household with ease!
 
 #### Features:
 * Calculate your expenses
