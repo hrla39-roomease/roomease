@@ -1,5 +1,5 @@
-# Room-ease
-## Prototype(Adding features, Continued project)
+# RoomEase
+## Prototype (Adding features, Continued project)
 
 ### About:
 
@@ -20,7 +20,6 @@ yarn install
 
 3. Once you have install the dependencies, you will need to create your mongo database.
 
-
 4. After you have set up your mongo database, type:
 ```sh
 npm run server
@@ -37,6 +36,7 @@ to start your ios simulator.
 * Firebase
 * Node
 * Express
+* MongoDB
 * Mongoose
 
 ## Team Members:
