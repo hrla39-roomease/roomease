@@ -94,7 +94,7 @@ export default function HomeScreen(props) {
           </View>
           {/* view chores */}
           {
-            props.chores.map(chore => {
+            props.chores.map((chore, index) => {
               if (chore.choreHolder === props.firstName && chore.isComplete === false) {
                 const dayInWordFormat = (day) => new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(day);
                 const month = (month) => new Intl.DateTimeFormat('en-US', { month: 'long' }).format(month);
@@ -103,7 +103,7 @@ export default function HomeScreen(props) {
                 let choreWordDay = dayInWordFormat(day);
                 let choreDay = day.getDate();
                 return (
-                  <View style={styles.tabContent}>
+                  <View style={styles.tabContent} key={index}>
                     <View style={styles.tabContentLeft}>
                       <Text style={styles.tabTextBoldNeutral}>{chore.name}</Text>
                     </View>
