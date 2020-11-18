@@ -92,14 +92,30 @@ export default function HomeScreen(props) {
           <View style={styles.tabHeadingContainer}>
             <Text style={styles.tabHeadingText}>Your Chores</Text>
           </View>
-          <View style={styles.tabContent}>
-            <View style={styles.tabContentLeft}>
-              <Text style={styles.tabTextBoldNeutral}>Peeling berries </Text>
-            </View>
-            <View style={styles.tabContentRight}>
-              <Text style={styles.tabTextPrimary}>(Thursday, November 12)</Text>
-            </View>
-          </View>
+          {/* view chores */}
+          {
+            props.chores.map(chore => {
+              if (chore.choreHolder === props.firstName && chore.isComplete === false) {
+                const dayInWordFormat = (day) => new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(day);
+                const month = (month) => new Intl.DateTimeFormat('en-US', { month: 'long' }).format(month);
+                let day = new Date(chore.date);
+                let choreMonth = month(day);
+                let choreWordDay = dayInWordFormat(day);
+                let choreDay = day.getDate();
+                return (
+                  <View style={styles.tabContent}>
+                    <View style={styles.tabContentLeft}>
+                      <Text style={styles.tabTextBoldNeutral}>{chore.name}</Text>
+                    </View>
+                    <View style={styles.tabContentRight}>
+                      <Text style={styles.tabTextPrimary}>{choreWordDay}, {choreMonth} {choreDay}</Text>
+                    </View>
+                  </View>
+                )
+              }
+            })
+          }
+
         </View>
         <View style={styles.tabContainer}>
           <View style={styles.tabHeadingContainer}>
