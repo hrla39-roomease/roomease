@@ -86,6 +86,7 @@ export default function DashboardScreen(props) {
             householdName={householdName}
             householdID={householdID}
             groceries={groceries}
+            chores={chores}
           />
           }
           options={{
