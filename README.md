@@ -43,3 +43,45 @@ to start your ios simulator.
 * Nick Rotondo
 * Alvin Delito
 * Alphina Long
+
+
+## Demo:
+
+### Screenshots:
+<details>
+<summary>Login Screen</summary>
+<br>
+
+![login screen](https://res.cloudinary.com/alvindelito/image/upload/v1606874961/roomease/login_j0mmhb.png)
+</details>
+
+<details>
+<summary>Home Screen</summary>
+<br>
+
+![home screen](https://res.cloudinary.com/alvindelito/image/upload/v1606874960/roomease/home_uhm9nz.png)
+</details>
+
+<details>
+<summary>Expenses Screen</summary>
+<br>
+
+![expenses screen](https://res.cloudinary.com/alvindelito/image/upload/v1606874960/roomease/expenses_rnlab2.png)
+</details>
+
+<details>
+<summary>Chores Screen</summary>
+<br>
+
+![chores screen](https://res.cloudinary.com/alvindelito/image/upload/v1606874960/roomease/chores_jwy1gx.png)
+</details>
+
+<details>
+<summary>Groceries Screen</summary>
+<br>
+
+![groceries screen](https://res.cloudinary.com/alvindelito/image/upload/v1606874960/roomease/groceries_au86cv.png)
+</details>
+
+### Video:
+![demo video](https://media.giphy.com/media/YsK0JFhzbZKBKTsSBE/giphy.gif)
