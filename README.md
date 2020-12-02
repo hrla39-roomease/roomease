@@ -83,5 +83,32 @@ to start your ios simulator.
 ![groceries screen](https://res.cloudinary.com/alvindelito/image/upload/v1606874960/roomease/groceries_au86cv.png)
 </details>
 
-### Video:
-![demo video](https://media.giphy.com/media/YsK0JFhzbZKBKTsSBE/giphy.gif)
+### Video Demos:
+
+<details>
+<summary>Login & Logout</summary>
+<br>
+
+![Login and logout gif](https://media.giphy.com/media/txfhsHiPXHms6u0yIk/giphy.gif)
+</details>
+
+<details>
+<summary>Add New Expense</summary>
+<br>
+
+![add new expense gif](https://media.giphy.com/media/Id9BaD6HS0gTaa17tu/giphy.gif)
+</details>
+
+<details>
+<summary>Add New Chore</summary>
+<br>
+
+![add new chore gif](https://media.giphy.com/media/NnXp0RnNpdqaavpqS3/giphy.gif)
+</details>
+
+<details>
+<summary>Add New Grocery</summary>
+<br>
+
+![add new grocery gif](https://media.giphy.com/media/XvL08c9FjeEfqk68A2/giphy.gif)
+</details>
