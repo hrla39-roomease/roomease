@@ -38,6 +38,7 @@ to start your ios simulator.
 * Express
 * MongoDB
 * Mongoose
+* Styled Components
 
 ## Team Members:
 * Nick Rotondo
